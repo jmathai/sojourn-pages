@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-2:#EFE8DA; --ink:#221B12; --ink-2:#5D5442;
+    --faint:#8E8471; --line:#DFD6C3; --rubric:#A32E22; --rubric-soft:#C9584B;
+    --cite:#1D5FA8; --wash:#F3E3B5;
+    --serif:'EB Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Instrument Sans',-apple-system,'Segoe UI',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--wash);}
+  a{color:var(--cite);text-decoration:none;}
+  a:hover{color:#164a86;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;}}
+</style>
+</helmet>
+
+<div style="position:relative;overflow:hidden;background:var(--paper);font-family:var(--sans);">
+
+  <!-- faint chaos: a noisy dark wash at the very top that dissolves into calm paper -->
+  <div aria-hidden="true" style="position:absolute;top:0;left:0;right:0;height:560px;pointer-events:none;background:linear-gradient(180deg, rgba(34,27,18,.06) 0%, rgba(34,27,18,.018) 34%, rgba(247,243,234,0) 74%);"></div>
+  <div aria-hidden="true" style="position:absolute;top:0;left:0;right:0;height:360px;pointer-events:none;opacity:.42;mix-blend-mode:multiply;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.55%22/></svg>');-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,transparent 100%);"></div>
+
+  <!-- ===== header ===== -->
+  <header style="position:relative;z-index:3;max-width:1180px;margin:0 auto;padding:30px 40px 0;display:flex;align-items:baseline;justify-content:space-between;">
+    <span style="font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:.01em;color:var(--ink);"><span style="color:var(--rubric);">S</span>ojourn</span>
+    <span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);">Scripture, unhurried</span>
+  </header>
+
+  <!-- ===== hero ===== -->
+  <section style="position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:60px 40px 96px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:64px;align-items:center;">
+    <div>
+      <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:22px;">A new way to be with scripture</p>
+      <h1 style="font-family:var(--serif);font-weight:500;font-size:clamp(42px,5vw,62px);line-height:1.06;letter-spacing:-.012em;color:var(--ink);text-wrap:pretty;"><span style="color:var(--rubric);">Stay</span> awhile<br>in scripture.</h1>
+      <p style="font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink-2);margin-top:26px;max-width:30em;text-wrap:pretty;">Ask what you actually wonder, and be answered the way an old, patient pastor would answer: gently, and always from the page itself. Every verse opens into the passage around it, until the words are not a reference but a place you are standing in.</p>
+
+      <div style="display:flex;align-items:center;gap:22px;margin-top:38px;flex-wrap:wrap;">
+        <span style="display:inline-flex;align-items:center;gap:11px;background:#141210;color:#fff;border-radius:13px;padding:14px 22px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.36 12.78c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.19-1.73-1.36-.14-2.65.8-3.34.8-.68 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.08 2.65-2.15.84-1.23 1.18-2.42 1.2-2.48-.03-.01-2.3-.88-2.32-3.5zM14.19 6.3c.6-.73 1.01-1.75.9-2.76-.87.03-1.92.58-2.55 1.3-.56.64-1.05 1.67-.92 2.65.97.08 1.96-.49 2.57-1.19z"/></svg>
+          <span style="font-size:16px;font-weight:600;letter-spacing:.01em;">Coming soon to iOS</span>
+        </span>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;">
+      <div style="position:relative;width:100%;max-width:440px;">
+        <div aria-hidden="true" style="position:absolute;inset:-6% -4% -8% -4%;background:radial-gradient(60% 55% at 50% 42%, rgba(247,243,234,.9) 0%, rgba(247,243,234,0) 72%);"></div>
+        <iframe src="phone-demo.html" title="A live look at Sojourn" scrolling="no" style="position:relative;width:100%;height:760px;border:0;background:transparent;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== four promises ===== -->
+  <section style="position:relative;z-index:2;border-top:1px solid var(--line);">
+    <div style="max-width:1180px;margin:0 auto;padding:0 40px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;">
+
+        <div style="padding:64px 56px 64px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">A new way</span></div>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Reading, remade as conversation</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Not a search box and not a feed. You bring a real question and follow it wherever it leads, verse by verse, at the pace of thought rather than the pace of a timeline.</p>
+        </div>
+
+        <div style="padding:64px 0 64px 56px;border-bottom:1px solid var(--line);">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">It envelops you</span></div>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">The passage closes around you</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Tap any verse and it opens with the words on either side, the whole chapter one gesture away. You do not glance at scripture here. You step inside it and stay.</p>
+        </div>
+
+        <div style="padding:64px 56px 64px 0;border-right:1px solid var(--line);">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">Exactly as written</span></div>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Every verse, exactly as written</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Scripture is never generated, paraphrased, or guessed. When a verse appears, it is the real text, drawn straight from the page, word for word. Never approximate. Never invented.</p>
+        </div>
+
+        <div style="padding:64px 0 64px 56px;">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">Like an old pastor</span></div>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Answered gently, and in context</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">It speaks the way a wise, unhurried pastor speaks: plainly, kindly, and rooted in the text. Ask anything, however small. You will not be rushed, ranked, or sold anything.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== how it feels walkthrough ===== -->
+  <section style="position:relative;z-index:2;background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div style="max-width:1180px;margin:0 auto;padding:88px 40px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:72px;align-items:center;">
+      <div style="display:flex;justify-content:center;order:2;">
+        <div style="position:relative;width:308px;height:666px;background:#141210;border-radius:46px;padding:10px;box-shadow:0 2px 3px rgba(30,20,5,.1), 0 30px 64px -20px rgba(30,20,5,.4), inset 0 0 0 2px #2a2a2e;">
+          <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#141210;border-radius:14px;z-index:3;"></div>
+          <div style="position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:#F7F3EA;">
+            <img src="assets/shot-chat.png" alt="Asking a question in Sojourn" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:{{ shot0op }};transition:opacity .8s ease;"/>
+            <img src="assets/shot-reader.png" alt="Reading the whole chapter" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:{{ shot1op }};transition:opacity .8s ease;"/>
+            <img src="assets/shot-peek.png" alt="A verse opening in context" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:{{ shot2op }};transition:opacity .8s ease;"/>
+          </div>
+        </div>
+      </div>
+      <div style="order:1;">
+        <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:20px;">How it feels</p>
+        <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.4vw,42px);line-height:1.12;letter-spacing:-.01em;color:var(--ink);margin-bottom:34px;text-wrap:pretty;">A question, and a place to sit with the answer.</h2>
+        <ol style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li onClick="{{ sel0 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row0bg }};transition:background .4s ease;">
+            <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a0 }};transition:opacity .4s ease;flex-shrink:0;"></span>
+            <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">01</span>
+            <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Ask honestly</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Say what you actually want to understand. The answer comes back calm, and cites its scripture as it goes.</p></div>
+          </li>
+          <li onClick="{{ sel1 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row1bg }};transition:background .4s ease;">
+            <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a1 }};transition:opacity .4s ease;flex-shrink:0;"></span>
+            <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">02</span>
+            <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Open the verse</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Tap a citation. The passage rises up in full, and the whole chapter is one gesture further in.</p></div>
+          </li>
+          <li onClick="{{ sel2 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row2bg }};transition:background .4s ease;">
+            <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a2 }};transition:opacity .4s ease;flex-shrink:0;"></span>
+            <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">03</span>
+            <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Read all around it</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Open the whole chapter, the verse held in the light of everything beside it, then step back out where you began.</p></div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== quiet quote ===== -->
+  <section style="position:relative;z-index:2;">
+    <div style="max-width:820px;margin:0 auto;padding:110px 40px;text-align:center;">
+      <span style="font-family:var(--serif);color:var(--rubric);font-size:44px;line-height:0;">&para;</span>
+      <blockquote style="font-family:var(--serif);font-weight:500;font-size:clamp(28px,3.6vw,40px);line-height:1.28;color:var(--ink);margin:30px 0 0;text-wrap:pretty;">&ldquo;Be still, and know.&rdquo; Sojourn is built for the second half of that sentence: the knowing that only comes when you stop hurrying.</blockquote>
+      <p style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--faint);margin-top:28px;">after Psalm 46:10</p>
+    </div>
+  </section>
+
+  <!-- ===== closing CTA ===== -->
+  <section style="position:relative;z-index:2;background:var(--ink);color:#F7F3EA;">
+    <div style="max-width:1180px;margin:0 auto;padding:80px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:30px;">
+      <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.6vw,44px);line-height:1.12;color:#F7F3EA;text-wrap:pretty;"><span style="color:var(--rubric-soft);">Stay</span> awhile in scripture.</h2>
+      <span style="display:inline-flex;align-items:center;gap:11px;background:#F7F3EA;color:#141210;border-radius:13px;padding:14px 24px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#141210" aria-hidden="true"><path d="M16.36 12.78c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.19-1.73-1.36-.14-2.65.8-3.34.8-.68 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.08 2.65-2.15.84-1.23 1.18-2.42 1.2-2.48-.03-.01-2.3-.88-2.32-3.5zM14.19 6.3c.6-.73 1.01-1.75.9-2.76-.87.03-1.92.58-2.55 1.3-.56.64-1.05 1.67-.92 2.65.97.08 1.96-.49 2.57-1.19z"/></svg>
+        <span style="font-size:16px;font-weight:600;letter-spacing:.01em;">Coming soon to iOS</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- ===== footer ===== -->
+  <footer style="position:relative;z-index:2;background:var(--ink);border-top:1px solid rgba(247,243,234,.12);">
+    <div style="max-width:1180px;margin:0 auto;padding:26px 40px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12.5px;color:rgba(247,243,234,.55);">
+      <span style="font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);"><span style="color:var(--rubric-soft);">S</span>ojourn</span>
+      <span>Scripture set in the World English Bible &middot; public domain</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:900}}">class Component extends DCLogic {
+  state = { step: 0 };
+  componentDidMount(){ this._arm(); }
+  componentWillUnmount(){ clearInterval(this._t); }
+  _arm(){
+    clearInterval(this._t);
+    this._t = setInterval(() => this.setState(s => ({ step: (s.step + 1) % 3 })), 4200);
+  }
+  pick(i){ this.setState({ step: i }); this._arm(); }
+  renderVals(){
+    const s = this.state.step;
+    const active = "rgba(163,46,34,.06)";
+    return {
+      shot0op: s === 0 ? 1 : 0, shot1op: s === 1 ? 1 : 0, shot2op: s === 2 ? 1 : 0,
+      a0: s === 0 ? 1 : 0, a1: s === 1 ? 1 : 0, a2: s === 2 ? 1 : 0,
+      row0bg: s === 0 ? active : "transparent",
+      row1bg: s === 1 ? active : "transparent",
+      row2bg: s === 2 ? active : "transparent",
+      sel0: () => this.pick(0), sel1: () => this.pick(1), sel2: () => this.pick(2),
+    };
+  }
+}</script>
+</body>
+</html>
