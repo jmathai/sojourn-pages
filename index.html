@@ -131,17 +131,17 @@
         <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:20px;">How it feels</p>
         <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.4vw,42px);line-height:1.12;letter-spacing:-.01em;color:var(--ink);margin-bottom:34px;text-wrap:pretty;">A question, and a place to sit with the answer.</h2>
         <ol style="list-style:none;display:flex;flex-direction:column;gap:8px;">
-          <li onClick="{{ sel0 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row0bg }};transition:background .4s ease;">
+          <li data-lp-step="0" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row0bg }};transition:background .4s ease;">
             <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a0 }};transition:opacity .4s ease;flex-shrink:0;"></span>
             <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">01</span>
             <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Ask honestly</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Say what you actually want to understand. The answer comes back calm, and cites its scripture as it goes.</p></div>
           </li>
-          <li onClick="{{ sel1 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row1bg }};transition:background .4s ease;">
+          <li data-lp-step="1" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row1bg }};transition:background .4s ease;">
             <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a1 }};transition:opacity .4s ease;flex-shrink:0;"></span>
             <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">02</span>
             <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Open the verse</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Tap a citation. The passage rises up in full, and the whole chapter is one gesture further in.</p></div>
           </li>
-          <li onClick="{{ sel2 }}" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row2bg }};transition:background .4s ease;">
+          <li data-lp-step="2" style="display:flex;gap:16px;cursor:pointer;padding:16px 18px;border-radius:14px;background:{{ row2bg }};transition:background .4s ease;">
             <span style="width:2px;border-radius:2px;background:var(--rubric);opacity:{{ a2 }};transition:opacity .4s ease;flex-shrink:0;"></span>
             <span style="font-family:var(--serif);color:var(--rubric);font-size:19px;font-weight:600;min-width:26px;">03</span>
             <div><div style="font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;">Read all around it</div><p style="font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);max-width:34em;">Open the whole chapter, the verse held in the light of everything beside it, then step back out where you began.</p></div>
@@ -183,8 +183,19 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:900}}">class Component extends DCLogic {
   state = { step: 0 };
-  componentDidMount(){ this._arm(); }
-  componentWillUnmount(){ clearInterval(this._t); }
+  componentDidMount(){
+    this._arm();
+    this._clicks = [];
+    document.querySelectorAll('[data-lp-step]').forEach((el) => {
+      const h = () => this.pick(parseInt(el.getAttribute('data-lp-step'), 10));
+      el.addEventListener('click', h);
+      this._clicks.push([el, h]);
+    });
+  }
+  componentWillUnmount(){
+    clearInterval(this._t);
+    (this._clicks || []).forEach(([el, h]) => el.removeEventListener('click', h));
+  }
   _arm(){
     clearInterval(this._t);
     this._t = setInterval(() => this.setState(s => ({ step: (s.step + 1) % 3 })), 4200);
@@ -199,7 +210,6 @@
       row0bg: s === 0 ? active : "transparent",
       row1bg: s === 1 ? active : "transparent",
       row2bg: s === 2 ? active : "transparent",
-      sel0: () => this.pick(0), sel1: () => this.pick(1), sel2: () => this.pick(2),
     };
   }
 }</script>
