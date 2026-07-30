@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="theme-color" content="#A32E22">
+<title>Notes &amp; readings &middot; Sojourn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-2:#EFE8DA; --ink:#221B12; --ink-2:#42392B;
+    --faint:#8E8471; --line:#DFD6C3; --rubric:#A32E22; --rubric-soft:#C9584B;
+    --cite:#1D5FA8; --wash:#F3E3B5;
+    --serif:'EB Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Instrument Sans',-apple-system,'Segoe UI',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--wash);}
+
+  .site-head{max-width:720px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
+  .site-head a{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
+  .site-head .note{font-family:var(--sans);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);}
+  .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:80px;}
+  .site-foot .inner{max-width:720px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
+  .site-foot .inner .mark{font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);text-decoration:none;}
+  .site-foot a{color:rgba(247,243,234,.7);}
+
+  .index{max-width:720px;margin:0 auto;padding:56px 28px 0;}
+  .index-eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:18px;}
+  .index-title{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,50px);line-height:1.1;letter-spacing:-.01em;color:var(--ink);}
+  .index-lede{font-family:var(--serif);font-size:20px;line-height:1.55;color:var(--ink-2);margin-top:18px;max-width:34em;text-wrap:pretty;padding-bottom:20px;}
+
+  .post-list{list-style:none;}
+  .post-item{padding:34px 0;border-top:1px solid var(--line);}
+  .post-item:last-child{border-bottom:1px solid var(--line);}
+  .post-item .date{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+  .post-item h2{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.2;letter-spacing:-.005em;margin-top:10px;}
+  .post-item h2 a{color:var(--ink);text-decoration:none;}
+  .post-item h2 a:hover{color:var(--rubric);}
+  .post-item .summary{font-family:var(--serif);font-size:19px;line-height:1.55;color:var(--ink-2);margin-top:10px;text-wrap:pretty;}
+  .post-item .more{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--cite);text-decoration:none;margin-top:14px;}
+  .post-item .more:hover{color:#164a86;}
+  .post-item .more .arr{transition:transform .2s ease;}
+  .post-item .more:hover .arr{transform:translateX(3px);}
+
+  @media (max-width:600px){
+    .post-item h2{font-size:24px;}
+    .post-item .summary{font-size:18px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER (keep) -->
+  <header class="site-head">
+    <a href="/"><span style="color:var(--rubric);">S</span>ojourn</a>
+    <span class="note">Notes &amp; readings</span>
+  </header>
+
+  <!-- INDEX -->
+  <main class="index">
+    <p class="index-eyebrow">Writing</p>
+    <h1 class="index-title">Notes &amp; readings</h1>
+    <p class="index-lede">Short essays on scripture, attention, and the slow work of reading well.</p>
+
+    <!-- POST LIST: repeat one <li class="post-item"> per writing, newest first -->
+    <ul class="post-list">
+
+      <li class="post-item">
+        <h2><a href="/writings/welcome-to-sojourn/">Welcome to Sojourn</a></h2>
+        <p class="summary">The way I always wanted to read the Bible: start anywhere, follow a thread, and keep going until it opens up. How a chat about generosity and envy became Sojourn.</p>
+        <a class="more" href="/writings/welcome-to-sojourn/">Read more <span class="arr">&rarr;</span></a>
+      </li>
+
+    </ul>
+  </main>
+
+  <!-- FOOTER (keep) -->
+  <footer class="site-foot">
+    <div class="inner">
+      <span style="display:inline-flex;align-items:baseline;gap:8px;"><a href="/" class="mark"><span style="color:var(--rubric-soft);">S</span>ojourn</a> <span>&middot; <a href="/writings/">Writings</a></span></span>
+      <span>Scripture set in the World English Bible &middot; public domain &middot; <a href="/privacy/">Privacy</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>

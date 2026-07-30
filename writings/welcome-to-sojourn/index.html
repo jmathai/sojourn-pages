@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="theme-color" content="#A32E22">
+<title>Welcome to Sojourn &middot; Sojourn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-2:#EFE8DA; --ink:#221B12; --ink-2:#42392B;
+    --faint:#8E8471; --line:#DFD6C3; --rubric:#A32E22; --rubric-soft:#C9584B;
+    --cite:#1D5FA8; --wash:#F3E3B5;
+    --serif:'EB Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Instrument Sans',-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--wash);}
+
+  /* ---- page chrome ---- */
+  .site-head{max-width:720px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
+  .site-head a{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
+  .site-head .note{font-family:var(--sans);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);}
+  .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:80px;}
+  .site-foot .inner{max-width:720px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
+  .site-foot .inner .mark{font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);text-decoration:none;}
+  .site-foot a{color:rgba(247,243,234,.7);}
+
+  /* ---- article ---- */
+  article{max-width:720px;margin:0 auto;padding:56px 28px 0;}
+  .post-meta{font-family:var(--sans);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:20px;}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,50px);line-height:1.1;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty;}
+  .byline{font-family:var(--sans);font-size:14px;color:var(--faint);margin-top:20px;}
+  .byline b{color:var(--ink-2);font-weight:600;}
+  .human-note{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:var(--rubric);background:rgba(163,46,34,.06);border:1px solid var(--line);border-radius:999px;padding:7px 15px 7px 12px;margin-top:18px;}
+  .human-note .dot{font-family:var(--serif);font-size:15px;line-height:1;}
+  .byline-wrap{padding-bottom:22px;border-bottom:1px solid var(--line);}
+
+  /* body rhythm: generous measure, large serif */
+  .prose{font-size:20px;line-height:1.68;color:var(--ink-2);}
+  .prose > * + *{margin-top:1.4em;}
+  .prose > h2 + *,.prose > h3 + *{margin-top:.7em;}
+  .prose h2{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.22;color:var(--ink);margin-top:2em;letter-spacing:-.005em;}
+  .prose h3{font-family:var(--serif);font-weight:600;font-size:24px;line-height:1.28;color:var(--ink);margin-top:1.7em;}
+  .prose p{text-wrap:pretty;}
+  .prose a{color:var(--cite);text-decoration:none;border-bottom:1px solid var(--cite-line,#9DBEE2);}
+  .prose a:hover{color:#164a86;border-bottom-color:#164a86;}
+  .prose strong{color:var(--ink);font-weight:600;}
+  .prose em{font-style:italic;}
+  .prose ul,.prose ol{padding-left:1.3em;}
+  .prose li{margin-top:.5em;}
+  .prose li::marker{color:var(--rubric-soft);}
+  .prose hr{border:0;height:1px;background:var(--line);margin:2.4em 0;}
+
+  /* inline code + code block */
+  .prose code{font-family:var(--mono);font-size:.82em;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;padding:.1em .4em;color:#6B3A2E;}
+  .prose pre{background:#241C14;border-radius:12px;padding:22px 24px;overflow-x:auto;margin-top:1.6em;}
+  .prose pre code{font-family:var(--mono);font-size:14px;line-height:1.7;background:none;border:0;padding:0;color:#EDE3D0;display:block;}
+
+  /* pull quote */
+  .prose blockquote{border-left:2px solid var(--rubric);padding:2px 0 2px 24px;margin:1.8em 0;font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.4;color:var(--ink);}
+  .prose blockquote p{margin:0;}
+  .prose blockquote cite{display:block;font-style:normal;font-size:15px;font-family:var(--sans);color:var(--faint);margin-top:12px;letter-spacing:.02em;}
+
+  /* scripture citation: the identity element */
+  citation{display:block;margin:1.8em 0;padding:20px 24px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;font-family:var(--serif);font-size:21px;line-height:1.5;color:var(--ink);}
+  citation .ref{display:block;font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cite);margin-bottom:10px;}
+  citation .v{color:var(--faint);font-size:.72em;font-family:var(--sans);vertical-align:.35em;margin-right:.35em;font-weight:600;}
+  citation em{background:var(--wash);font-style:normal;padding:0 2px;border-radius:2px;}
+
+  /* figures / images */
+  figure{margin:2em 0;}
+  figure img{width:100%;height:auto;border-radius:12px;display:block;background:var(--paper-2);}
+  figure figcaption{font-family:var(--sans);font-size:13.5px;color:var(--faint);margin-top:12px;text-align:center;text-wrap:pretty;}
+
+  @media (max-width:600px){
+    .prose{font-size:18px;}
+    .prose h2{font-size:26px;}
+    citation{font-size:19px;}
+    .prose blockquote{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER (keep) -->
+  <header class="site-head">
+    <a href="/"><span style="color:var(--rubric);">S</span>ojourn</a>
+    <span class="note">Notes &amp; readings</span>
+  </header>
+
+  <!-- ARTICLE -->
+  <article>
+    <p class="post-meta">Notes</p>
+
+    <h1>Welcome to Sojourn</h1>
+
+    <div class="byline-wrap">
+      <p class="byline">By <b>Jaisen Mathai</b> &middot; 1 min read</p>
+      <!-- HUMAN-WRITTEN BADGE -->
+      <p class="human-note"><span class="dot" aria-hidden="true">&para;</span>Written by a human, without any AI assistance.</p>
+    </div>
+
+    <div class="prose">
+
+      <p>I&rsquo;m selective with what I use AI for but I started chatting with Claude about what the Bible says about Generosity and Envy. Something I wanted to embrace more fully and something I was struggling with. I was pleasantly surprised by what Claude surfaced and how it framed different scripture.</p>
+
+      <p>What I love about chat is the ease by which I can start into a topic. Modern AI tools are very forgiving and can help you take the first step. From there, you can direct the conversation in any direction. It&rsquo;s really a new way to explore scripture and it&rsquo;s quite exciting. What Claude isn&rsquo;t great at is transitioning from <em>chat</em> to <em>reading scripture</em>. I found myself reading the context around a verse that it cited using a Bible.</p>
+
+      <p>My favorite deep dive exploration experience is Wikipedia. I often start reading about a topic and open new tabs of other Wikipedia pages when I want to learn more. I can go 4 or 5 tabs deep until I decide to close those tabs to return to the original topic. I wish I could read the Bible that way.</p>
+
+      <p>That&rsquo;s basically what Sojourn is. It&rsquo;s the way I always wanted to explore scripture and I hope you enjoy it as much as I do.</p>
+
+    </div>
+  </article>
+
+  <!-- FOOTER (keep) -->
+  <footer class="site-foot">
+    <div class="inner">
+      <span style="display:inline-flex;align-items:baseline;gap:8px;"><a href="/" class="mark"><span style="color:var(--rubric-soft);">S</span>ojourn</a><span>&middot;</span><a href="/writings/">Writings</a></span>
+      <span>Scripture set in the World English Bible &middot; public domain &middot; <a href="/privacy/">Privacy</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>
