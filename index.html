@@ -52,6 +52,7 @@
     .lp-hero h1{font-size:44px!important;}
     .lp-form{flex-direction:column;}
     .lp-form input,.lp-form button{width:100%;flex:none!important;min-width:0!important;}
+    .lp-hero-cta{flex-direction:column;align-items:flex-start;gap:14px;}
   }
 </style>
 </head>
@@ -72,16 +73,12 @@
       <h1 style="font-family:var(--serif);font-weight:500;font-size:clamp(42px,5vw,62px);line-height:1.06;letter-spacing:-.012em;color:var(--ink);text-wrap:pretty;"><span style="color:var(--rubric);">Stay</span> awhile<br>in scripture.</h1>
       <p style="font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink-2);margin-top:26px;max-width:30em;text-wrap:pretty;">Ask what you actually wonder, and be answered the way a wise, patient friend would: gently and rooted in scripture. Every verse opens into the passage around it, so the words become a place you can stand rather than a reference.</p>
 
-      <div style="margin-top:36px;max-width:440px;">
-        <form class="lp-form" data-invite action="https://formspree.io/f/xzdnenjj" method="POST" style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input type="email" name="email" required placeholder="you@email.com" aria-label="Email address" style="flex:1;min-width:200px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:var(--sans);font-size:15px;color:var(--ink);outline:none;">
-          <button type="submit" style="background:#141210;color:#fff;border:0;border-radius:12px;padding:14px 22px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;">Request an invite code</button>
-        </form>
-        <div data-done style="display:none;align-items:flex-start;gap:12px;background:rgba(163,46,34,.05);border:1px solid var(--line);border-radius:12px;padding:16px 18px;">
-          <span style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--rubric);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;">&#10003;</span>
-          <div><div style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);">Your request is in.</div><div style="font-family:var(--serif);font-size:16px;color:var(--ink-2);margin-top:2px;">We will send an invite code to your inbox when a place opens for you.</div></div>
-        </div>
-        <p data-msg aria-live="polite" style="min-height:20px;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink-2);margin-top:10px;"></p>
+      <div class="lp-hero-cta" style="margin-top:36px;max-width:440px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" style="display:inline-flex;align-items:center;gap:11px;background:#141210;color:#F7F3EA;text-decoration:none;border-radius:14px;padding:13px 22px 13px 18px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#F7F3EA" aria-hidden="true"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.14 9.14.76 1.1 1.66 2.34 2.85 2.29 1.14-.05 1.57-.74 2.95-.74 1.38 0 1.77.74 2.98.71 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.09 6.02c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.1 1.76-.96 2.79 1.02.08 2.06-.51 2.7-1.26z"/></svg>
+          <span style="display:flex;flex-direction:column;line-height:1.1;text-align:left;"><span style="font-family:var(--sans);font-size:10.5px;letter-spacing:.02em;opacity:.72;">Download on the</span><span style="font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;">App Store</span></span>
+        </a>
+        <span style="font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--ink-2);">Free to use, no subscription required.</span>
       </div>
     </div>
 
@@ -1206,16 +1203,11 @@
   <section class="lp-close" style="position:relative;z-index:2;background:var(--ink);color:#F7F3EA;">
     <div class="lp-pad" style="max-width:1180px;margin:0 auto;padding:80px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:30px;">
       <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.6vw,44px);line-height:1.12;color:#F7F3EA;text-wrap:pretty;"><span style="color:var(--rubric-soft);">Stay</span> awhile in scripture.</h2>
-      <p style="font-family:var(--serif);font-size:19px;line-height:1.5;color:rgba(247,243,234,.72);max-width:26em;margin-top:-8px;">Sojourn is opening slowly, by invitation. Leave your email and we will send an invite code when a place is ready.</p>
-      <form class="lp-form" data-invite action="https://formspree.io/f/xzdnenjj" method="POST" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:480px;margin-top:4px;">
-        <input type="email" name="email" required placeholder="you@email.com" aria-label="Email address" style="flex:1;min-width:220px;background:rgba(247,243,234,.08);border:1px solid rgba(247,243,234,.28);border-radius:12px;padding:14px 16px;font-family:var(--sans);font-size:15px;color:#F7F3EA;outline:none;">
-        <button type="submit" style="background:#F7F3EA;color:#141210;border:0;border-radius:12px;padding:14px 24px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;">Request an invite code</button>
-      </form>
-      <div data-done style="display:none;align-items:center;gap:12px;background:rgba(247,243,234,.08);border:1px solid rgba(247,243,234,.2);border-radius:12px;padding:16px 20px;max-width:480px;text-align:left;">
-        <span style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--rubric-soft);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;">&#10003;</span>
-        <div><div style="font-family:var(--serif);font-size:18px;font-weight:600;color:#F7F3EA;">Your request is in.</div><div style="font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.72);margin-top:2px;">We will send an invite code to your inbox when a place opens for you.</div></div>
-      </div>
-      <p data-msg aria-live="polite" style="min-height:22px;font-family:var(--serif);font-style:italic;font-size:16px;color:rgba(247,243,234,.72);margin-top:-14px;"></p>
+      <p style="font-family:var(--serif);font-size:19px;line-height:1.5;color:rgba(247,243,234,.72);max-width:26em;margin-top:-8px;">Sojourn is free on iPhone. Download it and stay awhile.</p>
+      <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" style="display:inline-flex;align-items:center;gap:11px;background:#F7F3EA;color:#141210;text-decoration:none;border-radius:14px;padding:14px 26px 14px 20px;margin-top:4px;">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="#141210" aria-hidden="true"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.14 9.14.76 1.1 1.66 2.34 2.85 2.29 1.14-.05 1.57-.74 2.95-.74 1.38 0 1.77.74 2.98.71 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.09 6.02c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.1 1.76-.96 2.79 1.02.08 2.06-.51 2.7-1.26z"/></svg>
+        <span style="display:flex;flex-direction:column;line-height:1.1;text-align:left;"><span style="font-family:var(--sans);font-size:11px;letter-spacing:.02em;opacity:.66;">Download on the</span><span style="font-family:var(--sans);font-size:20px;font-weight:600;letter-spacing:-.01em;">App Store</span></span>
+      </a>
     </div>
   </section>
 
@@ -1247,26 +1239,10 @@
   steps.forEach(function(li){ li.addEventListener('click', function(){ show(+li.getAttribute('data-step')); arm(); }); });
   arm();
 
-  // invite forms
-  Array.prototype.slice.call(document.querySelectorAll('[data-invite]')).forEach(function(form){
-    var wrap = form.parentNode;
-    var done = wrap.querySelector('[data-done]');
-    var msg = wrap.querySelector('[data-msg]');
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      if(form.dataset.sending) return;
-      form.dataset.sending = '1';
-      if(msg) msg.textContent = 'Sending\u2026';
-      fetch(form.action, { method:'POST', body:new FormData(form), headers:{ 'Accept':'application/json' } })
-        .then(function(res){
-          form.dataset.sending = '';
-          if(res.ok){ form.style.display='none'; if(done) done.style.display='flex'; if(msg) msg.textContent=''; form.reset(); }
-          else { if(msg){ msg.style.color='#E8A99F'; msg.textContent='Something went wrong. Please try again.'; } }
-        })
-        .catch(function(){
-          form.dataset.sending = '';
-          if(msg){ msg.style.color='#E8A99F'; msg.textContent='Something went wrong. Please try again.'; }
-        });
+  // App Store button clicks
+  Array.prototype.slice.call(document.querySelectorAll('a[href*="apps.apple.com"]')).forEach(function(a){
+    a.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('app_store_click', { location: a.closest('.lp-close') ? 'footer_cta' : 'hero' });
     });
   });
 })();
