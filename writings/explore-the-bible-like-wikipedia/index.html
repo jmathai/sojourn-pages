@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Ur pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Vr Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_kAebapSkxzFvChFqzVFYBrSUUProQWi5NzhPpkRpKRHv', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+    })
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="theme-color" content="#A32E22">
+<title>Explore the Bible like Wikipedia &middot; Sojourn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-2:#EFE8DA; --ink:#221B12; --ink-2:#42392B;
+    --faint:#8E8471; --line:#DFD6C3; --rubric:#A32E22; --rubric-soft:#C9584B;
+    --cite:#1D5FA8; --wash:#F3E3B5;
+    --serif:'EB Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Instrument Sans',-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--wash);}
+
+  /* ---- page chrome ---- */
+  .site-head{max-width:720px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
+  .site-head a{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
+  .site-head .note{font-family:var(--sans);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);}
+  .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:80px;}
+  .site-foot .inner{max-width:720px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
+  .site-foot .inner .mark{font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);text-decoration:none;}
+  .site-foot a{color:rgba(247,243,234,.7);}
+
+  /* ---- article ---- */
+  article{max-width:720px;margin:0 auto;padding:56px 28px 0;}
+  .post-meta{font-family:var(--sans);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:20px;}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,50px);line-height:1.1;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty;}
+  .byline{font-family:var(--sans);font-size:14px;color:var(--faint);margin-top:20px;}
+  .byline b{color:var(--ink-2);font-weight:600;}
+  .human-note{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:var(--rubric);background:rgba(163,46,34,.06);border:1px solid var(--line);border-radius:999px;padding:7px 15px 7px 12px;margin-top:18px;}
+  .human-note .dot{font-family:var(--serif);font-size:15px;line-height:1;}
+  .byline-wrap{padding-bottom:22px;border-bottom:1px solid var(--line);}
+
+  /* body rhythm: generous measure, large serif */
+  .prose{font-size:20px;line-height:1.68;color:var(--ink-2);}
+  .prose > * + *{margin-top:1.4em;}
+  .prose > h2 + *,.prose > h3 + *{margin-top:.7em;}
+  .prose h2{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.22;color:var(--ink);margin-top:2em;letter-spacing:-.005em;}
+  .prose h3{font-family:var(--serif);font-weight:600;font-size:24px;line-height:1.28;color:var(--ink);margin-top:1.7em;}
+  .prose p{text-wrap:pretty;}
+  .prose a{color:var(--cite);text-decoration:none;border-bottom:1px solid var(--cite-line,#9DBEE2);}
+  .prose a:hover{color:#164a86;border-bottom-color:#164a86;}
+  .prose strong{color:var(--ink);font-weight:600;}
+  .prose em{font-style:italic;}
+  .prose ul,.prose ol{padding-left:1.3em;}
+  .prose li{margin-top:.5em;}
+  .prose li::marker{color:var(--rubric-soft);}
+  .prose hr{border:0;height:1px;background:var(--line);margin:2.4em 0;}
+
+  /* inline code + code block */
+  .prose code{font-family:var(--mono);font-size:.82em;background:var(--paper-2);border:1px solid var(--line);border-radius:5px;padding:.1em .4em;color:#6B3A2E;}
+  .prose pre{background:#241C14;border-radius:12px;padding:22px 24px;overflow-x:auto;margin-top:1.6em;}
+  .prose pre code{font-family:var(--mono);font-size:14px;line-height:1.7;background:none;border:0;padding:0;color:#EDE3D0;display:block;}
+
+  /* pull quote */
+  .prose blockquote{border-left:2px solid var(--rubric);padding:2px 0 2px 24px;margin:1.8em 0;font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.4;color:var(--ink);}
+  .prose blockquote p{margin:0;}
+  .prose blockquote cite{display:block;font-style:normal;font-size:15px;font-family:var(--sans);color:var(--faint);margin-top:12px;letter-spacing:.02em;}
+
+  /* scripture citation: the identity element */
+  citation{display:block;margin:1.8em 0;padding:20px 24px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;font-family:var(--serif);font-size:21px;line-height:1.5;color:var(--ink);}
+  citation .ref{display:block;font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cite);margin-bottom:10px;}
+  citation .v{color:var(--faint);font-size:.72em;font-family:var(--sans);vertical-align:.35em;margin-right:.35em;font-weight:600;}
+  citation em{background:var(--wash);font-style:normal;padding:0 2px;border-radius:2px;}
+
+  /* figures / images */
+  figure{margin:2em 0;}
+  figure img{width:100%;height:auto;border-radius:12px;display:block;background:var(--paper-2);}
+  figure figcaption{font-family:var(--sans);font-size:13.5px;color:var(--faint);margin-top:12px;text-align:center;text-wrap:pretty;}
+
+  @media (max-width:600px){
+    .prose{font-size:18px;}
+    .prose h2{font-size:26px;}
+    citation{font-size:19px;}
+    .prose blockquote{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER (keep) -->
+  <header class="site-head">
+    <a href="/"><span style="color:var(--rubric);">S</span>ojourn</a>
+    <span class="note">Notes &amp; readings</span>
+  </header>
+
+  <!-- ARTICLE -->
+  <article>
+    <p class="post-meta">Notes</p>
+
+    <h1>Explore the Bible like Wikipedia</h1>
+
+    <div class="byline-wrap">
+      <p class="byline">By <b>Jaisen Mathai</b> &middot; 1 min read</p>
+      <!-- HUMAN-WRITTEN BADGE -->
+      <p class="human-note"><span class="dot" aria-hidden="true">&para;</span>Written by a human, without any AI assistance.</p>
+    </div>
+
+    <div class="prose">
+
+      <p>I really enjoy learning about a topic through Wikipedia because of how easy it is to dig into subtopics of my choosing. Often times it winds up being subtopics I never knew existed. I have always thought about reading Wikipedia as following branches on a tree. A large reason why it works is because Wikipedia links off to other topics in Wikipedia.</p>
+
+      <p>I pondered, what if we could do the same for the Bible? Scripture is full of cross references, prophecies and stories which connect each other to paint a fuller picture than any single verse or chapter.</p>
+
+      <p>The Sojourn experience really does feel like scripture unfolds around you. Every action is meant to be lightweight. When you tap on a scripture reference, we call that a <em>peek</em>. You choose if you want to <em>keep reading</em>. From there you can tap into an insight, read the entire chapter, chat about the verse or put it into action. A menu of options as lightweight as the <em>peek</em>.</p>
+
+      <p>As you explore scripture, Sojourn lays breadcrumbs which make up your trail. Your trail follows you back to the main chat when you decide to return to it. Your entire journey is follows you so that every detour you took is just a <em>scroll (up)</em> away.</p>
+
+      <p>I recently used Sojourn to understand why I was feeling envious despite things going well for me. Sojourn help me embark on a journey towards humility. It was the destination I didn&rsquo;t know I needed to arrive at.</p>
+
+      <pre><code>Envy
+│
+╰──▶ James 3:16
+    │
+    ╰──▶ Selfish ambition
+         │
+         ╰──▶ Humility
+              │
+              ╰──▶ Philippians 2:3
+                   │
+╭──────────────────╯
+│
+▼
+Envy</code></pre>
+
+      <p>Whatever is on your mind; Sojourn will help you explore scripture in a new way with the full text always at your <a href="https://en.wikipedia.org/wiki/Fingertips">fingertips</a>.</p>
+
+    </div>
+  </article>
+
+  <!-- FOOTER (keep) -->
+  <footer class="site-foot">
+    <div class="inner">
+      <span style="display:inline-flex;align-items:baseline;gap:8px;"><a href="/" class="mark"><span style="color:var(--rubric-soft);">S</span>ojourn</a><span>&middot;</span><a href="/writings/">Writings</a></span>
+      <span>Scripture set in the World English Bible &middot; public domain &middot; <a href="/privacy/">Privacy</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>
