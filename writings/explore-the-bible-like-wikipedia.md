@@ -11,9 +11,9 @@ I pondered, what if we could do the same for the Bible? Scripture is full of cro
 
 The Sojourn experience really does feel like scripture unfolds around you. Every action is meant to be lightweight. When you tap on a scripture reference, we call that a _peek_. You choose if you want to _keep reading_. From there you can tap into an insight, read the entire chapter, chat about the verse or put it into action. A menu of options as lightweight as the _peek_.
 
-As you explore scripture, Sojourn lays breadcrumbs which make up your trail. Your trail follows you back to the main chat when you decide to return to it. Your entire journey is follows you so that every detour you took is just a _scroll (up)_ away.
+As you explore scripture, Sojourn lays breadcrumbs which make up your trail. Your trail follows you back to the main chat when you decide to return to it. Your entire journey follows you so that every detour you took is just a _scroll (up)_ away.
 
-I recently used Sojourn to understand why I was feeling envious despite things going well for me. Sojourn help me embark on a journey towards humility. It was the destination I didn’t know I needed to arrive at.
+I recently used Sojourn to understand why I was feeling envious despite things going well for me. Sojourn helped me embark on a journey towards humility. It was the destination I didn’t know I needed to arrive at.
 
 ```
 Envy
