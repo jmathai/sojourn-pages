@@ -1,1 +1,5 @@
 .DS_Store
+
+# Scripture database (downloaded on first use by the topics skill)
+web-backend.sqlite
+.claude/skills/topics/.venv/
