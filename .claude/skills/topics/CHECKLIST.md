@@ -22,16 +22,18 @@ python3 -m http.server 8931   # then browse http://localhost:8931/topics/{slug}/
 - [ ] `og:image` is an **absolute** production URL (`https://trysojourn.app/topics/{slug}/og.png`)
       **and** the file exists locally at `topics/{slug}/og.png`, is a **1200×630 PNG with no alpha**.
 - [ ] Both JSON-LD blocks (`Article`, `FAQPage`) are present and parse as valid JSON.
-- [ ] Every `FAQPage` answer's text matches the rendered page's visible conversation answer
-      (tags stripped, doors flattened to `"quote" (Reference)`). The two-turn exchange's
-      follow-up is **not** its own FAQ entry.
+- [ ] Conversation is **one** `.exchange` (a single connected thread), **2–3 turns** total.
+- [ ] `FAQPage` entries = the opener plus any later turn that stands alone as a question (pure
+      follow-ups skipped). Each entry's answer text matches the matching rendered answer
+      (tags stripped, doors flattened to `"quote" (Reference)`).
 - [ ] `Article.image` matches `og:image` exactly.
 - [ ] All chapter text and conversation content is present in the raw HTML (no client fetching).
 - [ ] `rel="canonical"` and `og:url` are `https://trysojourn.app/topics/{slug}/` and match.
-- [ ] Sibling-links line present above the footer with **2–4** links.
+- [ ] `Read alongside` sibling line present above the footer with **1–3** links, each pointing to a
+      **live** topic (no coming-soon topics, no `/topics/` placeholders).
 - [ ] Heading hierarchy is `h1 → h2` with no skipped levels (`The study` / `The conversation`
       are real `<h2>`).
-- [ ] No swallowed-space defects in anchor text (e.g. the CTA reads `Continue in Sojourn`).
+- [ ] No swallowed-space defects in anchor text (the CTA badge reads `Download on the` / `App Store`).
 
 Most of A can be checked mechanically; see `scripts/` and the one-off snippet the build uses.
 The title/meta/tag/JSON-LD/heading/sibling assertions are pure string/DOM checks against the

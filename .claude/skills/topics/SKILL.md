@@ -137,27 +137,52 @@ query-shaped and must name the subject:
   = the meta description, `url` = the canonical, `image` = **exactly** the `og:image` URL,
   `datePublished` set honestly per page, `dateModified` bumped on material changes, `publisher`
   = Sojourn.
-- `FAQPage`: one entry per single-turn exchange plus the **opener** of the two-turn exchange;
-  the two-turn's follow-up is **not** its own entry. Answer `text` is the first paragraph of
-  the visible answer with door markup flattened to `"quote" (Reference)`, matching the rendered
-  page verbatim. If the conversation wording changes, update the JSON.
+- `FAQPage`: one entry for the opener, plus any **later turn whose question stands on its own** as a
+  search query (e.g. "Is envy the same as jealousy?"). **Skip pure follow-ups** that only make sense
+  as a reply (e.g. "But it comes right back the next morning"). Each entry's answer `text` is the
+  visible answer with door markup flattened to `"quote" (Reference)`, matching the rendered page
+  verbatim. Update the JSON whenever the conversation wording changes.
 
-**Seeded conversation — four exchanges:** disarming → two-turn (the single exchange with a
-follow-up) → **distinction** → hope-shaped close. The distinction exchange absorbs the topic's
-highest-volume synonym or "X vs Y" query where natural (e.g. envy vs jealousy). Every quoted
-fragment is a live door, byte-verified against WEB.
+**Seeded conversation — one conversation, 2–3 turns.** A single `.exchange`, never more than one
+(one connected thread, not several separate Q&As). A turn is one question and Sojourn's answer:
+write an opener plus **one or two** follow-ups. The opener must **stand on its own** (assume it is
+read cold, so state its context and don't lean on the study above); the follow-ups deepen that same
+thread. Fold the topic's highest-volume tension or "X vs Y" angle in where it fits naturally. Every
+quoted fragment is a live door, byte-verified against WEB.
 
 **Doors are inline anchors.** Each inline door is `<a class="door" href="#src-{chapter}" …>`,
 never a `<button>`: a true inline element (trailing punctuation must hug the reference), and
 with JS off it degrades to an in-page anchor that reveals the hidden `.chapter-source` block via
 `:target`. Leave no whitespace/newline between a door and the punctuation that follows it.
 
-**Sibling links.** Above the footer: `{Topic} often travels with — A · B · C` (2–4 links).
-Point them at the sibling slugs once those pages exist; until then point them at `/topics/` and
-leave `<!-- TODO: resolve sibling links when pages ship: … -->`.
+**Read alongside (sibling cross-links).** The footer's `.travels` block, labelled exactly
+`Read alongside`, points to other **live** topics only (never coming-soon ones). Maintain it for
+two goals at once: **relevance** (a reader who cares about this topic would plausibly want that one
+next) and **distribution** (every topic stays reachable and inbound links aren't all piled on one
+hub). Both *companions* (topics that travel together, e.g. Anger & Envy) and true *opposites*
+(e.g. Envy & Generosity) count as related; unrelated pairs get no link.
 
-**CTA.** The handoff link's label is a single text node (`Continue in Sojourn`) so no markup can
-swallow the space.
+Whenever you add, remove, or rename a topic, **re-derive every live topic's list, not just the new
+page's** — a new topic changes the graph for everyone. Procedure:
+
+1. List the live topics.
+2. **Relevance.** For each topic, rank the others by how closely they relate, strongest first.
+   Prefer reciprocity: if A lists B, B should list A unless B's slots are already filled by
+   stronger matches.
+3. **Draft** each list as its 1–3 most-related topics (most-related first).
+4. **Distribution pass.** *No orphans:* every live topic must be linked from at least one other;
+   if one isn't, add it to the list of its most-related topic. *No monopoly:* don't let one topic
+   collect every inbound link while a related topic sits at zero — when choosing between
+   comparably-relevant targets, pick the one with fewer inbound links. Never invent an irrelevant
+   link just to even out counts; relevance wins when there's no relevant alternative.
+5. Cap each list at **3** links (with only 2–3 live topics, 1–2 is normal), then regenerate the
+   footer `.travels` block on every affected page.
+
+**CTA.** The handoff is an App Store download badge: `<a class="cta" href="{App Store URL}">` with
+the Apple-logo SVG and a stacked two-line label — `Download on the` over `App Store`, each line its
+own text node (`.cta-top` / `.cta-store`) so no markup can swallow a space. It links straight to the
+App Store listing (`https://apps.apple.com/us/app/trysojourn/id6792011966`), not a topic deep link.
+The `<h2>` above it still reads `Continue this conversation, in Sojourn.`
 
 ## Scripture database (WEB translation)
 
