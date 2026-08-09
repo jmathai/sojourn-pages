@@ -32,8 +32,11 @@ a machine.
 - It must not sound AI-drafted. Avoid the tells: no "delve", "tapestry",
   "in a world where", "it's important to note", tidy rule-of-three lists, or hedgy
   throat-clearing. Cut filler. Let sentences vary in length.
-- No em dashes anywhere in post prose. Use a comma, a period, parentheses, or
-  reword. (This applies to the writing itself, not to the template chrome.)
+- No em dashes anywhere in copy we author. This is a hard rule and it is site-wide: not in
+  post prose, not in topic-page prose, and not in metadata (page titles, meta descriptions,
+  `og:`/`twitter:` tags, JSON-LD, image `alt`). Use a comma, a period, a colon, parentheses,
+  or reword. Separate title segments with ` &middot; ` (`·`), never ` — `. The only exception
+  is verbatim WEB scripture, which keeps its original punctuation (`&mdash;` included).
 - Prefer plain words, contractions, and concrete images over abstraction.
 
 ## Post front matter
@@ -88,8 +91,19 @@ Markdown → HTML mapping inside `.prose`:
 | `---` | `<hr>` |
 | `![alt](src)` | `<figure><img src="src" alt="alt"><figcaption>…</figcaption></figure>` (figcaption only if the markdown supplies a caption) |
 
-Scripture citations are the site's signature element. When the markdown quotes
-scripture, render it with the custom `<citation>` element rather than a blockquote:
+Scripture citations are the site's signature element, and they carry its core promise.
+
+**Quote, never compose (site-wide).** Any scripture shown anywhere on the site, in posts,
+topic pages, or any future page, is quoted verbatim from the World English Bible and verified
+against the WEB source. It is never written, paraphrased, or recalled from memory. Resolve
+every reference against the WEB data before showing its text, and keep the source's original
+punctuation (`&mdash;` included, the one place em dashes are allowed). Today the verifier lives
+with its only consumer, the topics skill (`.claude/skills/topics/verify-scripture.py`); when a
+second surface starts quoting scripture (a post's `<citation>`, say), promote it to its own
+skill and run it there too.
+
+When the markdown quotes scripture, render it with the custom `<citation>` element rather than
+a blockquote:
 
 ```html
 <citation>
