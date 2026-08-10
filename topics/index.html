@@ -37,30 +37,32 @@
   body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;}
   ::selection{background:var(--wash);}
 
-  .site-head{max-width:820px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
+  .site-head{max-width:680px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
   .site-head a.mark{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
   .site-head .get{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.01em;color:var(--cite);text-decoration:none;border-bottom:1px solid var(--cite-line);}
   .site-head .get:hover{color:#164a86;border-bottom-color:#164a86;}
   .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:88px;}
-  .site-foot .inner{max-width:820px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
+  .site-foot .inner{max-width:680px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
   .site-foot .inner .fmark{font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);text-decoration:none;}
   .site-foot a{color:rgba(247,243,234,.7);}
 
-  .index{max-width:820px;margin:0 auto;padding:60px 28px 0;}
+  .index{max-width:680px;margin:0 auto;padding:60px 28px 0;}
   .index-eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:18px;}
   .index-title{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,52px);line-height:1.08;letter-spacing:-.01em;color:var(--ink);}
   .index-lede{font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink-2);margin-top:20px;max-width:32em;text-wrap:pretty;padding-bottom:6px;}
 
-  /* topic grid */
-  .topic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:44px;}
-  .topic{display:block;background:var(--paper);padding:30px 30px 34px;text-decoration:none;color:inherit;transition:background .2s ease;}
-  .topic:hover{background:var(--paper-2);}
-  .topic .name{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.1;letter-spacing:-.01em;color:var(--ink);}
+  /* topic list: one card per row on every width, the share image over its text */
+  .topic-list{display:flex;flex-direction:column;gap:24px;margin-top:44px;}
+  .topic{display:block;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:background .2s ease,border-color .2s ease;}
+  .topic:hover{background:var(--paper-2);border-color:var(--rubric-soft);}
+  .topic .og{display:block;width:100%;height:auto;border-bottom:1px solid var(--line);}
+  .topic .body{display:block;padding:22px 26px 26px;}
+  .topic .name{display:block;font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.1;letter-spacing:-.01em;color:var(--ink);}
   .topic:hover .name{color:var(--rubric);}
-  .topic .sub{font-family:var(--serif);font-size:17.5px;line-height:1.5;color:var(--ink-2);margin-top:10px;text-wrap:pretty;}
+  .topic .sub{display:block;font-family:var(--serif);font-size:18px;line-height:1.5;color:var(--ink-2);margin-top:8px;text-wrap:pretty;}
   .topic .verse{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cite);margin-top:16px;display:inline-block;}
   .topic.soon{cursor:default;}
-  .topic.soon:hover{background:var(--paper);}
+  .topic.soon:hover{background:var(--paper);border-color:var(--line);}
   .topic.soon .name{color:var(--faint);}
   .topic.soon .sub{color:var(--faint);}
   .topic .soon-tag{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:16px;display:inline-block;}
@@ -69,9 +71,8 @@
   .index-note b{color:var(--ink-2);font-weight:600;}
 
   @media (max-width:640px){
-    .topic-grid{grid-template-columns:1fr;}
-    .topic{padding:26px 24px 28px;}
-    .topic .name{font-size:26px;}
+    .topic .body{padding:20px 22px 24px;}
+    .topic .name{font-size:24px;}
     .topic .sub{font-size:16.5px;}
   }
 </style>
@@ -90,49 +91,69 @@
     <h1 class="index-title">Start where you are.</h1>
     <p class="index-lede">Each study gathers what scripture knows about one thing you might be carrying. Read slowly, with every verse a door into the chapter around it.</p>
 
-    <!-- TOPIC GRID: repeat one <a class="topic"> per topic. Data-driven from the topics manifest. -->
-    <div class="topic-grid">
+    <!-- TOPIC LIST: repeat one <a class="topic"> per topic. Data-driven from the topics manifest. -->
+    <div class="topic-list">
 
       <a class="topic" href="/topics/envy/">
-        <span class="name">Envy</span>
-        <span class="sub">What scripture knows about wanting what isn&rsquo;t yours.</span>
-        <span class="verse">Proverbs 14:30</span>
+        <img class="og" src="/topics/envy/og.png" width="1200" height="630" loading="lazy" alt="Envy, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Envy</span>
+          <span class="sub">What scripture knows about wanting what isn&rsquo;t yours.</span>
+          <span class="verse">Proverbs 14:30</span>
+        </span>
       </a>
 
       <a class="topic" href="/topics/generosity/">
-        <span class="name">Generosity</span>
-        <span class="sub">What scripture knows about the freedom of an open hand.</span>
-        <span class="verse">2 Corinthians 9:7</span>
+        <img class="og" src="/topics/generosity/og.png" width="1200" height="630" loading="lazy" alt="Generosity, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Generosity</span>
+          <span class="sub">What scripture knows about the freedom of an open hand.</span>
+          <span class="verse">2 Corinthians 9:7</span>
+        </span>
       </a>
 
       <a class="topic" href="/topics/anger/">
-        <span class="name">Anger</span>
-        <span class="sub">The heat that rises before we choose, and what to do with it.</span>
-        <span class="verse">James 1:19</span>
+        <img class="og" src="/topics/anger/og.png" width="1200" height="630" loading="lazy" alt="Anger, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Anger</span>
+          <span class="sub">The heat that rises before we choose, and what to do with it.</span>
+          <span class="verse">James 1:19</span>
+        </span>
       </a>
 
       <a class="topic" href="/topics/contentment/">
-        <span class="name">Contentment</span>
-        <span class="sub">On learning to have enough, in plenty and in want.</span>
-        <span class="verse">Philippians 4:11</span>
+        <img class="og" src="/topics/contentment/og.png" width="1200" height="630" loading="lazy" alt="Contentment, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Contentment</span>
+          <span class="sub">On learning to have enough, in plenty and in want.</span>
+          <span class="verse">Philippians 4:11</span>
+        </span>
       </a>
 
       <a class="topic" href="/topics/fear/">
-        <span class="name">Fear</span>
-        <span class="sub">On being afraid, and the voice that keeps saying do not be afraid.</span>
-        <span class="verse">Isaiah 41:10</span>
+        <img class="og" src="/topics/fear/og.png" width="1200" height="630" loading="lazy" alt="Fear, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Fear</span>
+          <span class="sub">On being afraid, and the voice that keeps saying do not be afraid.</span>
+          <span class="verse">Isaiah 41:10</span>
+        </span>
+      </a>
+
+      <a class="topic" href="/topics/anxiety/">
+        <img class="og" src="/topics/anxiety/og.png" width="1200" height="630" loading="lazy" alt="Anxiety, a Bible study from Sojourn">
+        <span class="body">
+          <span class="name">Anxiety</span>
+          <span class="sub">When the mind will not be still, and what is offered instead.</span>
+          <span class="verse">Philippians 4:6</span>
+        </span>
       </a>
 
       <span class="topic soon">
-        <span class="name">Anxiety</span>
-        <span class="sub">When the mind will not be still, and what is offered instead.</span>
-        <span class="soon-tag">Coming soon&hellip;</span>
-      </span>
-
-      <span class="topic soon">
-        <span class="name">Grief</span>
-        <span class="sub">Company for the losses that don&rsquo;t resolve on schedule.</span>
-        <span class="soon-tag">Coming soon&hellip;</span>
+        <span class="body">
+          <span class="name">Grief</span>
+          <span class="sub">Company for the losses that don&rsquo;t resolve on schedule.</span>
+          <span class="soon-tag">Coming soon&hellip;</span>
+        </span>
       </span>
 
     </div>
