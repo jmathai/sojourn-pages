@@ -31,6 +31,9 @@ python3 -m http.server 8931   # then browse http://localhost:8931/topics/{slug}/
 - [ ] `rel="canonical"` and `og:url` are `https://trysojourn.app/topics/{slug}/` and match.
 - [ ] `Read alongside` sibling line present above the footer with **1–3** links, each pointing to a
       **live** topic (no coming-soon topics, no `/topics/` placeholders).
+- [ ] Inline `.xref` cross-links: every prose mention of another **live** topic is linked at first
+      mention to `/topics/{slug}/` using `.xref` (solid underline, never `.door`); no self-links, none
+      inside quoted scripture; and existing pages that name this topic in prose link back to it.
 - [ ] Heading hierarchy is `h1 → h2` with no skipped levels (`The study` / `The conversation`
       are real `<h2>`).
 - [ ] No swallowed-space defects in anchor text (the CTA badge reads `Download on the` / `App Store`).

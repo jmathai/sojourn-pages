@@ -178,6 +178,22 @@ page's** — a new topic changes the graph for everyone. Procedure:
 5. Cap each list at **3** links (with only 2–3 live topics, 1–2 is normal), then regenerate the
    footer `.travels` block on every affected page.
 
+**Inline cross-links (`.xref`).** Beyond the footer, whenever a page's *prose* names another
+**live** topic as a genuine reference (a distinction it draws, an antidote it names, a sibling it
+defines itself against), link that word's **first** mention to the topic:
+`<a class="xref" href="/topics/{slug}/">word</a>`. `.xref` is cite-blue with a **solid** underline,
+deliberately distinct from the **dotted** scripture `.door` (navigate vs. open-a-peek); never let the
+two be confused. Rules:
+
+- Link only genuine topic references. Never the page's own topic word, never words inside quoted
+  scripture, and never an incidental use of a common emotion word (e.g. "the fear of losing" where
+  the Fear study isn't the point). First mention only, not every occurrence.
+- These are **bidirectional and prose-driven.** When you add a topic, also sweep every existing live
+  page for prose mentions of the new topic and link them (backlinks), and link the new page's
+  mentions of existing topics. A page whose prose names no sibling simply gets no inline xref — the
+  footer `.travels` still backlinks it.
+- The `.xref` style ships in `topic-template.html`; keep it when copying the template.
+
 **CTA.** The handoff is an App Store download badge: `<a class="cta" href="{App Store URL}">` with
 the Apple-logo SVG and a stacked two-line label — `Download on the` over `App Store`, each line its
 own text node (`.cta-top` / `.cta-store`) so no markup can swallow a space. It links straight to the

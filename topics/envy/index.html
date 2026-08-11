@@ -148,6 +148,10 @@
   .door .door-ref{font-family:var(--sans);font-size:.62em;font-weight:600;letter-spacing:.02em;white-space:nowrap;color:var(--faint);}
   .door:hover .door-ref{color:var(--cite);}
 
+  /* inline cross-topic link: solid underline, distinct from the dotted scripture doors */
+  .xref{color:var(--cite);text-decoration:none;border-bottom:1px solid var(--cite-line);}
+  .xref:hover{color:#164a86;border-bottom-color:#164a86;}
+
   /* ---- seeded conversation ---- */
   .convo{margin-top:64px;padding-top:34px;border-top:1px solid var(--line);}
   .convo-intro{font-family:var(--sans);font-size:13px;letter-spacing:.02em;color:var(--faint);text-wrap:pretty;margin-bottom:8px;}
@@ -340,7 +344,7 @@
 
       <!-- Beat 7 · Philippians 4 / Ecclesiastes 4 / 1 Corinthians 13 -->
       <div class="beat">
-        <p class="transition">Scripture will not leave envy diagnosed and untreated. Its cure is not more. It is enough. Paul says contentment was a thing he had to learn, the slow way, in plenty and in need alike.</p>
+        <p class="transition">Scripture will not leave envy diagnosed and untreated. Its cure is not more. It is enough. Paul says <a class="xref" href="/topics/contentment/">contentment</a> was a thing he had to learn, the slow way, in plenty and in need alike.</p>
         <figure class="setpass" data-ch="philippians-4" data-verses="11-13" data-setting="Paul on the secret of contentment">
           <blockquote><span class="v">11</span>Not that I speak because of lack, for I have learned in whatever state I am, to be content in it. <span class="v">12</span>I know how to be humbled, and I also know how to abound. In any and all circumstances I have learned the secret both to be filled and to be hungry, both to abound and to be in need. <span class="v">13</span>I can do all things through Christ who strengthens me.</blockquote>
           <figcaption><span class="ref">Philippians 4:11&ndash;13</span><a class="read-chapter" href="#src-philippians-4" data-ch="philippians-4" data-verses="11-13">Read the whole chapter <span class="arr">&rarr;</span></a></figcaption>
