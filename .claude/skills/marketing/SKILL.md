@@ -55,6 +55,20 @@ logged-in user via a saved cookie:
 `reddit_session` is long-lived (months). When `refresh` starts returning 403/429,
 the cookie has expired, repeat the steps above.
 
+### Hacker News session (for `refresh`)
+
+Story scores come from the public API, but HN shows a **comment's** score only to
+its author, so `refresh` scrapes it from the logged-in HTML. This needs your HN
+login cookie:
+
+1. In a browser logged into `news.ycombinator.com`, open DevTools → **Storage** →
+   **Cookies** → `https://news.ycombinator.com`.
+2. Copy the **`user`** cookie value (looks like `username&<hash>`).
+3. Save it to `.hn-cookie` in this folder as `user=<value>`. It is gitignored.
+
+Without it, HN story stats still work; only comment upvotes are skipped. Comment
+scores are visible for **your own** comments only, HN never exposes anyone else's.
+
 ## Usage
 
 Run from this skill folder using its venv:
@@ -75,10 +89,10 @@ Run from this skill folder using its venv:
 `--date`, `--medium`, and `--link` are required; `--upvotes`, `--comments`,
 `--views`, `--clicks`, and `--notes` are optional.
 
-### Refresh Reddit stats
+### Refresh stats
 
-Crawls every row where `Medium` is `Reddit`, fetches the post or comment via the
-Reddit `.json` endpoint, and writes back **Upvotes** and **Comments**:
+Crawls every `Reddit` and `HackerNews` row, fetches the post or comment, and writes
+back **Upvotes** and **Comments**:
 
 ```
 # Preview without writing
@@ -89,16 +103,19 @@ Reddit `.json` endpoint, and writes back **Upvotes** and **Comments**:
 ```
 
 - Random sleeps between requests (`--min-sleep` / `--max-sleep`, seconds) keep it
-  gentle on Reddit. Backs off and retries on 403/429.
-- Handles both post permalinks (`/comments/<id>/...`) and comment permalinks
+  gentle on the sites. Reddit backs off and retries on 403/429.
+- **Reddit**: handles post permalinks (`/comments/<id>/...`) and comment permalinks
   (`/comments/<id>/comment/<cid>/`). For a comment, Upvotes is the comment's score
-  and Comments is its reply count.
-- Chat share links (`/c/chat.../s/...`) and non-Reddit rows are skipped.
+  and Comments is its reply count. Chat share links (`/c/chat.../s/...`) are skipped.
+- **Hacker News**: stories use the JSON API (`score`, `descendants`); comments use
+  the JSON API for reply count and the logged-in HTML scrape for the score.
+- A value is only written when it's available, so cells like a manual view count or
+  an unavailable score are never clobbered.
 
 ## Notes
 
 - Dates are written as-is with `USER_ENTERED`, so Sheets parses `8/11/2026` as a date.
 - `sheet.py list` prints raw CSV, handy for a quick scan or piping.
-- **Views are never fetched.** Reddit only exposes `view_count` to a post's owner
-  and returns `null` over the API, so `refresh` leaves the Views column alone.
-  Fill it manually from Reddit's post insights if you want it.
+- **Views are never fetched.** Neither Reddit nor HN exposes view counts over their
+  APIs, so `refresh` leaves the Views column alone. Fill it manually from each site's
+  post insights if you want it.

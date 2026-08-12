@@ -1,8 +1,9 @@
 # Reads, appends, and refreshes rows in the "Sojourn Marketing" Google Sheet.
-# Writes via a service-account key; refresh pulls Reddit stats using a saved session cookie.
+# Writes via a service-account key; refresh pulls Reddit (cookie) and Hacker News stats.
 import argparse
 import json
 import random
+import re
 import sys
 import time
 import urllib.error
@@ -14,7 +15,8 @@ import gspread
 
 SHEET_ID = "1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg"
 KEY_PATH = Path(__file__).parent / ".service-account.json"
-COOKIE_PATH = Path(__file__).parent / ".reddit-cookie"
+REDDIT_COOKIE_PATH = Path(__file__).parent / ".reddit-cookie"
+HN_COOKIE_PATH = Path(__file__).parent / ".hn-cookie"
 COLUMNS = ["Date", "Medium", "Upvotes", "Comments", "Views", "Clicks", "Link", "Notes"]
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
 
@@ -46,12 +48,12 @@ def cmd_add(args):
 
 
 def reddit_json(path, tries=4):
-    if not COOKIE_PATH.exists():
+    if not REDDIT_COOKIE_PATH.exists():
         sys.exit(
-            f"No Reddit session cookie at {COOKIE_PATH}.\n"
+            f"No Reddit session cookie at {REDDIT_COOKIE_PATH}.\n"
             "Copy the reddit_session cookie from a logged-in browser and save it there."
         )
-    cookie = COOKIE_PATH.read_text().strip()
+    cookie = REDDIT_COOKIE_PATH.read_text().strip()
     url = "https://www.reddit.com" + path.rstrip("/") + ".json?raw_json=1"
     req = urllib.request.Request(
         url, headers={"User-Agent": UA, "Accept": "application/json", "Cookie": cookie}
@@ -93,37 +95,91 @@ def reddit_stats(url):
     return {"upvotes": post.get("ups"), "comments": post.get("num_comments")}
 
 
+def hn_item(item_id):
+    url = f"https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return json.loads(r.read())
+
+
+def hn_count_replies(item):
+    total = 0
+    for kid_id in item.get("kids", []):
+        kid = hn_item(kid_id)
+        if kid and not kid.get("deleted") and not kid.get("dead"):
+            total += 1 + hn_count_replies(kid)
+    return total
+
+
+def hn_comment_score(item_id):
+    """Scrape a comment's score, which HN renders only to its author, via the saved cookie."""
+    if not HN_COOKIE_PATH.exists():
+        return None
+    cookie = HN_COOKIE_PATH.read_text().strip()
+    url = f"https://news.ycombinator.com/item?id={item_id}"
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Cookie": cookie})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        html = r.read().decode("utf-8", "replace")
+    match = re.search(rf'id="score_{item_id}">(\d+)\s+point', html)
+    return int(match.group(1)) if match else None
+
+
+def hn_stats(url):
+    """Return {upvotes, comments} for a Hacker News story or comment URL, or None.
+
+    Stories expose their score over the JSON API. Comment scores are author-only, so
+    they are scraped from the logged-in HTML; upvotes is None if unavailable. For a
+    comment, comments is the recursive reply count.
+    """
+    ids = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query).get("id")
+    if not ids:
+        return None
+    item = hn_item(ids[0])
+    if item is None:
+        return None
+    if item.get("type") == "comment":
+        return {"upvotes": hn_comment_score(ids[0]), "comments": hn_count_replies(item)}
+    return {"upvotes": item.get("score"), "comments": item.get("descendants")}
+
+
 def cmd_refresh(args):
+    fetchers = {"reddit": reddit_stats, "hackernews": hn_stats}
     ws = worksheet()
     rows = ws.get_all_values()
     updates = []
+    changed_rows = set()
     for i, row in enumerate(rows[1:], start=2):
-        medium = (row[1] if len(row) > 1 else "").strip()
+        medium = (row[1] if len(row) > 1 else "").strip().lower()
         link = (row[6] if len(row) > 6 else "").strip()
-        if medium.lower() != "reddit" or not link:
+        fetch = fetchers.get(medium)
+        if not fetch or not link:
             continue
         try:
-            stats = reddit_stats(link)
+            stats = fetch(link)
         except Exception as e:
             print(f"row {i}: FETCH FAILED ({type(e).__name__}: {e}) {link}")
             continue
         if stats is None:
-            print(f"row {i}: skip (not a post/comment URL) {link}")
+            print(f"row {i}: skip (unrecognized URL) {link}")
             continue
         up, cm = stats["upvotes"], stats["comments"]
         print(f"row {i}: upvotes={up} comments={cm}  {link}")
         if not args.dry_run:
-            updates.append({"range": f"C{i}", "values": [[str(up)]]})
-            updates.append({"range": f"D{i}", "values": [[str(cm)]]})
+            if up is not None:
+                updates.append({"range": f"C{i}", "values": [[str(up)]]})
+                changed_rows.add(i)
+            if cm is not None:
+                updates.append({"range": f"D{i}", "values": [[str(cm)]]})
+                changed_rows.add(i)
         time.sleep(random.uniform(args.min_sleep, args.max_sleep))
 
     if args.dry_run:
-        print("(dry run — nothing written; views are left untouched, Reddit's API doesn't expose them)")
+        print("(dry run — nothing written; Views are left untouched, neither API exposes them)")
     elif updates:
         ws.batch_update(updates, value_input_option="USER_ENTERED")
-        print(f"Updated {len(updates) // 2} Reddit rows (upvotes + comments).")
+        print(f"Updated {len(changed_rows)} rows (upvotes and/or comments).")
     else:
-        print("No Reddit rows updated.")
+        print("No rows updated.")
 
 
 def main():

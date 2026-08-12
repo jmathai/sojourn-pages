@@ -5,7 +5,8 @@
 web-backend.sqlite
 .claude/skills/topics/.venv/
 
-# Marketing skill: venv, service-account credentials, Reddit session cookie
+# Marketing skill: venv, service-account credentials, Reddit + Hacker News session cookies
 .claude/skills/marketing/.venv/
 .claude/skills/marketing/.service-account.json
 .claude/skills/marketing/.reddit-cookie
+.claude/skills/marketing/.hn-cookie
