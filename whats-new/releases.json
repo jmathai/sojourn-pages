@@ -1,0 +1,41 @@
+{
+  "_comment": "Source of truth for the What's New page. Human-authored raw notes per release, newest first. The whats-new skill reads this and regenerates the pre-generated per-version overviews baked into index.html. 'version' is the key the app passes in the hash (#version_<version>); it can be an integer build number or a semver string. EXAMPLE DATA — replace with real releases.",
+  "latest": "5",
+  "releases": [
+    {
+      "version": "5",
+      "date": "2026-08-10",
+      "highlights": [
+        "Study arcs on every topic page: a clear order to move through a topic, from the first question to where scripture lands.",
+        "Faster chapter reader; chapters open and scroll more smoothly.",
+        "Fixes to dark mode and a handful of small rough edges."
+      ]
+    },
+    {
+      "version": "4",
+      "date": "2026-07-02",
+      "highlights": [
+        "Seeded conversations: a gentle prompt to start reflecting when you don't know where to begin.",
+        "Bookmark a verse and come back to it later.",
+        "Share a passage as an image."
+      ]
+    },
+    {
+      "version": "3",
+      "date": "2026-05-20",
+      "highlights": [
+        "New topics for grief and anxiety.",
+        "Verse of the day on the home screen.",
+        "Better search across the text."
+      ]
+    },
+    {
+      "version": "2",
+      "date": "2026-04-08",
+      "highlights": [
+        "The first topic pages.",
+        "Chapter reader for reading a passage in context."
+      ]
+    }
+  ]
+}
