@@ -69,7 +69,7 @@ def reddit_json(path, tries=4):
             with urllib.request.urlopen(req, timeout=25) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
-            if e.code in (403, 429) and attempt < tries - 1:
+            if e.code in (403, 429, 500, 502, 503) and attempt < tries - 1:
                 time.sleep(delay)
                 delay *= 2
                 continue
@@ -98,6 +98,65 @@ def reddit_stats(url):
         return {"upvotes": comment.get("ups"), "comments": count_replies(comment)}
     post = data[0]["data"]["children"][0]["data"]
     return {"upvotes": post.get("ups"), "comments": post.get("num_comments")}
+
+
+def _parse_count(s):
+    """'352' / '1,234' / '12.3K' / '1.1M' -> int."""
+    s = s.replace(",", "").strip().rstrip(".")
+    mult = 1
+    if s and s[-1] in "Kk":
+        mult, s = 1000, s[:-1]
+    elif s and s[-1] in "Mm":
+        mult, s = 1_000_000, s[:-1]
+    return int(float(s) * mult)
+
+
+def _reddit_html(url, tries=3):
+    """Fetch a Reddit web page as the logged-in user, or None. Backs off on 5xx/403/429."""
+    cookie = REDDIT_COOKIE_PATH.read_text().strip()
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Cookie": cookie})
+    delay = 8
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=25) as r:
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 429, 500, 502, 503) and attempt < tries - 1:
+                time.sleep(delay)
+                delay *= 2
+                continue
+            return None
+
+
+def reddit_views(url):
+    """Return a Reddit post's or comment's view count, or None.
+
+    View counts are shown only to the author, in the logged-in web page (never the
+    JSON API). Comments carry theirs on a dedicated insight page as
+    aria-label="N views"; posts render 'N views' beside the eye icon, just before the
+    post's /poststats/ link. Returns None for removed content or content the session
+    doesn't own (no insight rendered).
+    """
+    path = urllib.parse.urlsplit(url).path
+    comment = re.search(r"/comment/([a-z0-9]+)", path)
+    if comment:
+        html = _reddit_html(f"https://www.reddit.com/commentstats/t1_{comment.group(1)}")
+        if html is None:
+            return None
+        m = re.search(r'aria-label="([\d][\d,.]*\s*[KMkm]?)\s*views?"', html)
+        return _parse_count(m.group(1)) if m else None
+
+    post = re.search(r"/comments/([a-z0-9]+)", path)
+    if not post:
+        return None
+    html = _reddit_html(url)
+    if html is None:
+        return None
+    anchor = html.find(f"/poststats/{post.group(1)}")
+    if anchor < 0:
+        return None  # no stats bar (removed post, or not the author)
+    m = re.search(r"([\d][\d,.]*\s*[KMkm]?)\s*views?\b", html[max(0, anchor - 300):anchor])
+    return _parse_count(m.group(1)) if m else None
 
 
 def hn_item(item_id):
@@ -153,15 +212,62 @@ APPSTORE_COLUMNS = [
 ]
 
 
-def insert_appstore_rows(rows):
-    """Insert daily rows into the App Store Connect tab with the most recent at the top.
+def mdy(iso_date):
+    """'2026-08-12' -> '8/12/2026' to match the sheet's date style."""
+    y, m, d = iso_date.split("-")
+    return f"{int(m)}/{int(d)}/{int(y)}"
 
-    Rows are inserted oldest-first at row 2, so each newer day pushes older ones down
-    and the newest ends up directly under the header.
+
+def appstore_row(metrics):
+    """Build a sheet row (APPSTORE_COLUMNS order) from an appstore.daily_rows() entry."""
+    imp = metrics["impressions"]
+    total = metrics["first_time_downloads"] + metrics["redownloads"]
+    conversion = f"{round(100 * total / imp, 1)}%" if imp else ""
+    sources = metrics["sources"]
+    return [
+        mdy(metrics["date"]), imp, metrics["page_views"],
+        metrics["first_time_downloads"], metrics["redownloads"], conversion,
+        sources.get("Other", 0), sources.get("LinkedIn", 0),
+        sources.get("Reddit", 0), sources.get("HackerNews", 0),
+    ]
+
+
+def insert_appstore_rows(rows):
+    """Insert daily rows into the App Store Connect tab with the most recent day on top.
+
+    Row 1 is the header and row 2 is a pinned totals row, so days are inserted oldest-first
+    at row 3: each newer day pushes older ones down and the newest ends up directly under
+    the totals row.
     """
     ws = worksheet(APPSTORE_SHEET)
-    for row in sorted(rows, key=lambda r: r[0]):
-        ws.insert_row(row, index=2, value_input_option="USER_ENTERED")
+    for row in sorted(rows, key=lambda r: _date_key(r[0])):
+        ws.insert_row(row, index=3, value_input_option="USER_ENTERED")
+    pin_totals_row(ws)
+
+
+def pin_totals_row(ws):
+    """Force the totals row (row 2) formula ranges to start at row 3.
+
+    Inserting a row at row 3 makes Sheets bump each totals range's start down a row
+    (e.g. SUM(B3:B1000) -> SUM(B4:B1000)), which would drop the newest day from the
+    totals. Re-pinning the start back to row 3 keeps every day counted, whatever
+    function each cell uses (SUM, AVERAGE, ...). A no-op when row 2 holds no formulas.
+    """
+    formulas = (ws.get("A2:J2", value_render_option="FORMULA") or [[]])[0]
+    formulas += [""] * (10 - len(formulas))
+    pinned = [
+        re.sub(r"([A-Za-z]+\()([A-Z]+)\d+", r"\g<1>\g<2>3", f, count=1)
+        if isinstance(f, str) and f.startswith("=") else f
+        for f in formulas
+    ]
+    if pinned != formulas:
+        ws.update([pinned], "A2:J2", value_input_option="USER_ENTERED")
+
+
+def _date_key(mdy_str):
+    """Chronological sort key for an 'M/D/YYYY' date string."""
+    m, d, y = (int(x) for x in mdy_str.split("/"))
+    return (y, m, d)
 
 
 def refresh_marketing(args):
@@ -186,13 +292,18 @@ def refresh_marketing(args):
             print(f"row {i}: skip (unrecognized URL) {link}")
             continue
         up, cm = stats["upvotes"], stats["comments"]
-        print(f"row {i}: upvotes={up} comments={cm}  {link}")
+        views = reddit_views(link) if medium == "reddit" else None
+        suffix = f" views={views}" if views is not None else ""
+        print(f"row {i}: upvotes={up} comments={cm}{suffix}  {link}")
         if not args.dry_run:
             if up is not None:
                 updates.append({"range": f"C{i}", "values": [[str(up)]]})
                 changed_rows.add(i)
             if cm is not None:
                 updates.append({"range": f"D{i}", "values": [[str(cm)]]})
+                changed_rows.add(i)
+            if views is not None:
+                updates.append({"range": f"E{i}", "values": [[str(views)]]})
                 changed_rows.add(i)
         time.sleep(random.uniform(args.min_sleep, args.max_sleep))
 
@@ -208,16 +319,29 @@ def refresh_marketing(args):
 def refresh_appstore(args):
     """Update the App Store Connect tab from the analytics report, most recent day on top."""
     try:
-        count = appstore.instance_count()
+        metrics = appstore.daily_rows()
     except Exception as e:
         print(f"App Store: skipped ({type(e).__name__}: {e})")
         return
-    if count == 0:
+    if not metrics:
         print("App Store: no data yet (Apple is still provisioning the analytics report).")
         return
-    print(f"App Store: {count} report instances available.")
-    # Parsing the report CSV into daily rows is finalized against the real columns once
-    # Apple provisions data; insert_appstore_rows keeps the most recent day on top.
+
+    ws = worksheet(APPSTORE_SHEET)
+    existing = {row[0] for row in ws.get_all_values()[1:] if row}
+    fresh = [m for m in metrics if mdy(m["date"]) not in existing]
+    rows = [appstore_row(m) for m in fresh]
+
+    if args.dry_run:
+        print(f"App Store: {len(metrics)} day(s) available, {len(rows)} new (dry run):")
+        for row in sorted(rows, key=lambda r: r[0]):
+            print("  " + ",".join(str(c) for c in row))
+        return
+    if not rows:
+        print(f"App Store: up to date ({len(metrics)} day(s) available, all present).")
+        return
+    insert_appstore_rows(rows)
+    print(f"App Store: inserted {len(rows)} day(s).")
 
 
 def cmd_refresh(args):

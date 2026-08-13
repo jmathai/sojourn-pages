@@ -150,10 +150,23 @@ It runs two steps:
 
 1. **Marketing tab** — crawls every `Reddit` and `HackerNews` row, fetches the post
    or comment, and writes back **Upvotes** and **Comments**.
-2. **App Store Connect tab** — pulls the day's App Store analytics and inserts a row
-   per day, **most recent at the top** (new days go in at row 2, pushing older rows
-   down). Downloads are split into the source columns. Skips gracefully with a
-   message while Apple is still provisioning the report.
+2. **App Store Connect tab** — reads the analytics reports, aggregates them into one
+   row per calendar date, and inserts only the dates not already in the sheet, **most
+   recent day on top** (row 1 is the header, row 2 is a totals row, so new days go in at
+   row 3, pushing older days down; the totals-row formulas are re-pinned to start at row 3
+   after each insert, since Sheets would otherwise bump the range past the new day).
+   Impressions,
+   page views, downloads, and redownloads come from the **Standard** reports, which
+   carry the complete daily totals. Skips gracefully with a message while Apple is
+   still provisioning the reports.
+
+   **Source attribution caveat.** Splitting First-Time Downloads into the per-channel
+   columns (Reddit / LinkedIn / HackerNews) needs the referrer domain, which lives in
+   the `Source Info` field of the **`App Downloads Detailed`** report. Apple gates
+   Detailed reports behind a volume threshold, so for a low-volume app that report has
+   **0 instances** and every download falls into **`Other`**. The code already reads
+   `Source Info` and maps it via `appstore.SOURCE_CHANNELS`, so the channel columns
+   populate automatically once the Detailed download report starts provisioning.
 
 - Random sleeps between requests (`--min-sleep` / `--max-sleep`, seconds) keep it
   gentle on the sites. Reddit backs off and retries on 403/429.
@@ -169,6 +182,13 @@ It runs two steps:
 
 - Dates are written as-is with `USER_ENTERED`, so Sheets parses `8/11/2026` as a date.
 - `sheet.py list` prints raw CSV, handy for a quick scan or piping.
-- **Views are never fetched.** Neither Reddit nor HN exposes view counts over their
-  APIs, so `refresh` leaves the Views column alone. Fill it manually from each site's
-  post insights if you want it.
+- **Views** are fetched for Reddit **posts and comments** you authored. Reddit shows a
+  view count only to the author, in the logged-in web page (never the JSON API), so
+  `refresh` scrapes it via the `.reddit-cookie` session and writes column E:
+  - **Comments** — from the dedicated insight page `reddit.com/commentstats/t1_<id>`,
+    which server-renders `aria-label="N views"`.
+  - **Posts** — `N views` beside the eye icon on the post page, just before its
+    `/poststats/<id>` link.
+  - **Removed/moderated posts** and content you don't own render no insight, so they're
+    left blank. **Hacker News** exposes no views at all. Fill any remaining Views (e.g.
+    LinkedIn) manually.
