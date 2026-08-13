@@ -1,5 +1,6 @@
 .DS_Store
 .playwright-mcp
+__pycache__
 
 # Scripture database (downloaded on first use by the topics skill)
 web-backend.sqlite
@@ -10,3 +11,6 @@ web-backend.sqlite
 .claude/skills/marketing/.service-account.json
 .claude/skills/marketing/.reddit-cookie
 .claude/skills/marketing/.hn-cookie
+
+# App Store Connect API key material (analytics)
+.appstoreconnect/

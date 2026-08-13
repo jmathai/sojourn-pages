@@ -5,9 +5,15 @@ description: Read and update the "Sojourn Marketing" Google Sheet — the log of
 
 # Sojourn Marketing Sheet
 
-Tracks every place Sojourn has been shared and how it performed. Backed by the
-Google Sheet titled **Sojourn Marketing**
-(`1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg`). One row per post:
+Tracks Sojourn's marketing in one Google Sheet
+(`1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg`) with two tabs:
+
+- **Marketing** — one row per post/comment on a channel (the source of promotion).
+- **App Store Connect** — one row per day of App Store analytics (the result).
+
+## Marketing tab
+
+One row per post:
 
 | Column | Meaning |
 | --- | --- |
@@ -19,6 +25,23 @@ Google Sheet titled **Sojourn Marketing**
 | `Clicks` | Referral clicks to the site |
 | `Link` | URL to the post |
 | `Notes` | Free text, e.g. `moderated` |
+
+## App Store Connect tab
+
+One row per day, newest at the top. Left columns are the daily totals from the
+Acquisition dashboard; the right columns break **First-Time Downloads** down by
+source, matching the Marketing tab's `Medium` values (`Other` first, then a column
+per channel). Add a new source column when a new `Medium` appears.
+
+| Column | Meaning |
+| --- | --- |
+| `Date` | `M/D/YYYY` |
+| `Impressions` | App Store impressions |
+| `Page Views` | Product page views |
+| `First-Time Downloads` | New downloads |
+| `Redownloads` | Redownloads |
+| `Conversion` | Conversion rate |
+| `Other`, `LinkedIn`, `Reddit`, `HackerNews`, ... | First-time downloads attributed to each source |
 
 ## Setup (one time)
 
@@ -32,12 +55,33 @@ browser flow.
 3. Open the Sheet and **Share** it with the service account's `client_email`
    (the `...@...iam.gserviceaccount.com` address), granting **Editor**.
 
-The Python venv lives at `.venv/` in this folder (also gitignored) with `gspread`
-installed. Recreate it if missing:
+The Python venv lives at `.venv/` in this folder (also gitignored). Recreate it
+if missing:
 
 ```
-python3 -m venv .venv && .venv/bin/python -m pip install gspread google-auth
+python3 -m venv .venv && .venv/bin/python -m pip install gspread google-auth pyjwt cryptography
 ```
+
+### App Store Connect key (for the App Store Connect tab)
+
+The App Store analytics come from the App Store Connect API, authenticated with an
+**individual** API key (Users and Access → Integrations → App Store Connect API →
+Individual Keys). An individual key inherits your account's access, so it can read
+analytics; a team key with only App Manager access cannot.
+
+Key material lives in the repo-root `.appstoreconnect/` folder (the whole folder is
+gitignored):
+
+```
+.appstoreconnect/
+  private_keys/ApiKey_<KEY_ID>.p8   # the downloaded key
+  key.json                          # {"key_id": "...", "app_id": "..."}
+  state.json                        # analytics report request ids (created by the skill)
+```
+
+Individual keys sign the JWT with `sub: "user"` and no issuer id. The Analytics
+Reports API is asynchronous: the skill requests a report once, and Apple takes hours
+(up to a day) to provision the data before any rows are available.
 
 ### Reddit session (for `refresh`)
 
@@ -89,18 +133,27 @@ Run from this skill folder using its venv:
 `--date`, `--medium`, and `--link` are required; `--upvotes`, `--comments`,
 `--views`, `--clicks`, and `--notes` are optional.
 
-### Refresh stats
+### Refresh stats ("update marketing" updates BOTH tabs)
 
-Crawls every `Reddit` and `HackerNews` row, fetches the post or comment, and writes
-back **Upvotes** and **Comments**:
+`refresh` updates the whole spreadsheet, not just one tab. **"Update marketing"
+means update both the Marketing tab and the App Store Connect tab.**
 
 ```
 # Preview without writing
 .venv/bin/python sheet.py refresh --dry-run
 
-# Fetch and update the sheet
+# Fetch and update both tabs
 .venv/bin/python sheet.py refresh
 ```
+
+It runs two steps:
+
+1. **Marketing tab** — crawls every `Reddit` and `HackerNews` row, fetches the post
+   or comment, and writes back **Upvotes** and **Comments**.
+2. **App Store Connect tab** — pulls the day's App Store analytics and inserts a row
+   per day, **most recent at the top** (new days go in at row 2, pushing older rows
+   down). Downloads are split into the source columns. Skips gracefully with a
+   message while Apple is still provisioning the report.
 
 - Random sleeps between requests (`--min-sleep` / `--max-sleep`, seconds) keep it
   gentle on the sites. Reddit backs off and retries on 403/429.

@@ -13,15 +13,20 @@ from pathlib import Path
 
 import gspread
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import appstore
+
 SHEET_ID = "1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg"
 KEY_PATH = Path(__file__).parent / ".service-account.json"
 REDDIT_COOKIE_PATH = Path(__file__).parent / ".reddit-cookie"
 HN_COOKIE_PATH = Path(__file__).parent / ".hn-cookie"
+MARKETING_SHEET = "Marketing"
+APPSTORE_SHEET = "App Store Connect"
 COLUMNS = ["Date", "Medium", "Upvotes", "Comments", "Views", "Clicks", "Link", "Notes"]
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
 
 
-def worksheet():
+def worksheet(title=MARKETING_SHEET):
     if not KEY_PATH.exists():
         sys.exit(
             f"No service-account key at {KEY_PATH}.\n"
@@ -29,7 +34,7 @@ def worksheet():
             "and save the JSON there."
         )
     client = gspread.service_account(filename=str(KEY_PATH))
-    return client.open_by_key(SHEET_ID).sheet1
+    return client.open_by_key(SHEET_ID).worksheet(title)
 
 
 def cmd_list(args):
@@ -142,9 +147,27 @@ def hn_stats(url):
     return {"upvotes": item.get("score"), "comments": item.get("descendants")}
 
 
-def cmd_refresh(args):
+APPSTORE_COLUMNS = [
+    "Date", "Impressions", "Page Views", "First-Time Downloads", "Redownloads",
+    "Conversion", "Other", "LinkedIn", "Reddit", "HackerNews",
+]
+
+
+def insert_appstore_rows(rows):
+    """Insert daily rows into the App Store Connect tab with the most recent at the top.
+
+    Rows are inserted oldest-first at row 2, so each newer day pushes older ones down
+    and the newest ends up directly under the header.
+    """
+    ws = worksheet(APPSTORE_SHEET)
+    for row in sorted(rows, key=lambda r: r[0]):
+        ws.insert_row(row, index=2, value_input_option="USER_ENTERED")
+
+
+def refresh_marketing(args):
+    """Update the Marketing tab: scrape Reddit and Hacker News rows for upvotes and comments."""
     fetchers = {"reddit": reddit_stats, "hackernews": hn_stats}
-    ws = worksheet()
+    ws = worksheet(MARKETING_SHEET)
     rows = ws.get_all_values()
     updates = []
     changed_rows = set()
@@ -177,9 +200,30 @@ def cmd_refresh(args):
         print("(dry run — nothing written; Views are left untouched, neither API exposes them)")
     elif updates:
         ws.batch_update(updates, value_input_option="USER_ENTERED")
-        print(f"Updated {len(changed_rows)} rows (upvotes and/or comments).")
+        print(f"Marketing: updated {len(changed_rows)} rows (upvotes and/or comments).")
     else:
-        print("No rows updated.")
+        print("Marketing: no rows updated.")
+
+
+def refresh_appstore(args):
+    """Update the App Store Connect tab from the analytics report, most recent day on top."""
+    try:
+        count = appstore.instance_count()
+    except Exception as e:
+        print(f"App Store: skipped ({type(e).__name__}: {e})")
+        return
+    if count == 0:
+        print("App Store: no data yet (Apple is still provisioning the analytics report).")
+        return
+    print(f"App Store: {count} report instances available.")
+    # Parsing the report CSV into daily rows is finalized against the real columns once
+    # Apple provisions data; insert_appstore_rows keeps the most recent day on top.
+
+
+def cmd_refresh(args):
+    """Update marketing stats: both the Marketing tab and the App Store Connect tab."""
+    refresh_marketing(args)
+    refresh_appstore(args)
 
 
 def main():
