@@ -9,12 +9,12 @@ HOST = "us.posthog.com"
 SITE_HOST = "trysojourn.app"
 
 # Website sheet column header -> PostHog event name. The order defines the columns
-# after Date. The 'topic_peak_open' header maps to the actual 'topic_peek_open' event.
+# after Date.
 EVENTS = {
     "Page Views": "$pageview",
     "app_store_click": "app_store_click",
     "topic_reader_open": "topic_reader_open",
-    "topic_peak_open": "topic_peek_open",
+    "topic_peek_open": "topic_peek_open",
     "topic_handoff": "topic_handoff",
     "rageclick": "$rageclick",
 }

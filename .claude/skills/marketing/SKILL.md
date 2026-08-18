@@ -56,7 +56,7 @@ event column is a daily count of that PostHog event on the `trysojourn.app` host
 | `Page Views` | `$pageview` |
 | `app_store_click` | `app_store_click` |
 | `topic_reader_open` | `topic_reader_open` |
-| `topic_peak_open` | `topic_peek_open` (the header reads "peak"; the event is "peek") |
+| `topic_peek_open` | `topic_peek_open` |
 | `topic_handoff` | `topic_handoff` |
 | `rageclick` | `$rageclick` |
 
