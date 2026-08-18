@@ -6,10 +6,11 @@ description: Read and update the "Sojourn Marketing" Google Sheet — the log of
 # Sojourn Marketing Sheet
 
 Tracks Sojourn's marketing in one Google Sheet
-(`1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg`) with two tabs:
+(`1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg`) with three tabs:
 
 - **Marketing** — one row per post/comment on a channel (the source of promotion).
 - **App Store Connect** — one row per day of App Store analytics (the result).
+- **Website** — one row per day of trysojourn.app analytics from PostHog.
 
 ## Marketing tab
 
@@ -42,6 +43,22 @@ Apple's `Source Type`, so they always sum to First-Time Downloads.
 | `Page View Conversion` | Downloads &divide; page views |
 | `Impression Conversion` | Downloads &divide; impressions |
 | `App Store Search`, `App Store Browse`, `Web Referrer`, `App Referrer`, `Other` | First-time downloads by Apple `Source Type` (`Web Referrer` is the collective social/links bucket) |
+
+## Website tab
+
+One row per day of `trysojourn.app` analytics from PostHog, newest at the top. Each
+event column is a daily count of that PostHog event on the `trysojourn.app` host
+(`properties.$host`). The header-to-event mapping lives in `posthog.EVENTS`.
+
+| Column | PostHog event |
+| --- | --- |
+| `Date` | `M/D/YYYY` |
+| `Page Views` | `$pageview` |
+| `app_store_click` | `app_store_click` |
+| `topic_reader_open` | `topic_reader_open` |
+| `topic_peak_open` | `topic_peek_open` (the header reads "peak"; the event is "peek") |
+| `topic_handoff` | `topic_handoff` |
+| `rageclick` | `$rageclick` |
 
 ## Setup (one time)
 
@@ -82,6 +99,14 @@ gitignored):
 Individual keys sign the JWT with `sub: "user"` and no issuer id. The Analytics
 Reports API is asynchronous: the skill requests a report once, and Apple takes hours
 (up to a day) to provision the data before any rows are available.
+
+### PostHog key (for the Website tab)
+
+The Website analytics come from PostHog (US cloud, `us.posthog.com`), queried with a
+**personal** API key (Settings → Personal API keys). Save it in the **repo-root
+`.env`** as `POSTHOG_API_KEY=...` (gitignored). The skill discovers the project id from
+`/api/users/@me/` and pulls daily event counts with a HogQL query, so no project id
+needs to be configured.
 
 ### Reddit session (for `refresh`)
 
@@ -133,20 +158,20 @@ Run from this skill folder using its venv:
 `--date`, `--medium`, and `--link` are required; `--upvotes`, `--comments`,
 `--views`, `--clicks`, and `--notes` are optional.
 
-### Refresh stats ("update marketing" updates BOTH tabs)
+### Refresh stats ("update marketing" updates ALL tabs)
 
 `refresh` updates the whole spreadsheet, not just one tab. **"Update marketing"
-means update both the Marketing tab and the App Store Connect tab.**
+means update the Marketing, App Store Connect, and Website tabs.**
 
 ```
 # Preview without writing
 .venv/bin/python sheet.py refresh --dry-run
 
-# Fetch and update both tabs
+# Fetch and update all tabs
 .venv/bin/python sheet.py refresh
 ```
 
-It runs two steps:
+It runs three steps:
 
 1. **Marketing tab** — crawls every `Reddit` and `HackerNews` row, fetches the post
    or comment, and writes back **Upvotes** and **Comments**.
@@ -172,6 +197,11 @@ It runs two steps:
    link-driven installs are reported collectively as **`Web Referrer`** rather than per
    site. If Apple starts emitting domains at higher volume, `Web Referrer` can be split
    back out from `Source Info`.
+3. **Website tab** — queries PostHog (HogQL) for daily counts of each mapped event on
+   the `trysojourn.app` host and **upserts**, **most recent day on top** (no totals
+   row; new days insert at row 2). The current day is still accumulating, so a date
+   already in the sheet is rewritten in place when its counts change. Skips gracefully
+   with a message when `POSTHOG_API_KEY` is missing or the query fails.
 
 - Random sleeps between requests (`--min-sleep` / `--max-sleep`, seconds) keep it
   gentle on the sites. Reddit backs off and retries on 403/429.

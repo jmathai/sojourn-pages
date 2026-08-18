@@ -15,6 +15,7 @@ import gspread
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import appstore
+import posthog
 
 SHEET_ID = "1VZPdG0y7YN0T2jB7BFQiXgGghtluIskCcrAvyAtUlCg"
 KEY_PATH = Path(__file__).parent / ".service-account.json"
@@ -22,6 +23,8 @@ REDDIT_COOKIE_PATH = Path(__file__).parent / ".reddit-cookie"
 HN_COOKIE_PATH = Path(__file__).parent / ".hn-cookie"
 MARKETING_SHEET = "Marketing"
 APPSTORE_SHEET = "App Store Connect"
+WEBSITE_SHEET = "Website"
+WEBSITE_COLUMNS = ["Date", *posthog.EVENTS]
 COLUMNS = ["Date", "Medium", "Upvotes", "Comments", "Views", "Clicks", "Link", "Notes"]
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
 
@@ -376,10 +379,67 @@ def refresh_appstore(args):
         print(f"App Store: up to date ({len(metrics)} day(s) available, all current).")
 
 
+def website_row(metrics):
+    """Build a sheet row (WEBSITE_COLUMNS order) from a posthog.daily_rows() entry."""
+    return [mdy(metrics["date"])] + [metrics[h] for h in posthog.EVENTS]
+
+
+def refresh_website(args):
+    """Upsert the Website tab from PostHog, most recent day on top.
+
+    PostHog data for the current day is still accumulating, so a date already in the
+    sheet is rewritten in place when its counts change; new days are inserted at row 2.
+    """
+    try:
+        metrics = posthog.daily_rows()
+    except Exception as e:
+        print(f"Website: skipped ({type(e).__name__}: {e})")
+        return
+    if not metrics:
+        print("Website: no data returned from PostHog.")
+        return
+
+    ws = worksheet(WEBSITE_SHEET)
+    grid = ws.get_all_values()
+    ncol = len(WEBSITE_COLUMNS)
+    last_col = chr(ord("A") + ncol - 1)
+    date_row = {r[0]: i + 1 for i, r in enumerate(grid) if i >= 1 and r and r[0]}
+
+    updates, inserts = [], []
+    for m in metrics:
+        row = website_row(m)
+        rn = date_row.get(row[0])
+        if rn is None:
+            inserts.append(row)
+        elif [str(c) for c in row] != (grid[rn - 1] + [""] * ncol)[:ncol]:
+            updates.append((rn, row))
+
+    if args.dry_run:
+        print(f"Website: {len(metrics)} day(s) available, {len(updates)} changed, {len(inserts)} new (dry run):")
+        for _, row in sorted(updates):
+            print("  update " + ",".join(str(c) for c in row))
+        for row in sorted(inserts, key=lambda r: _date_key(r[0])):
+            print("  insert " + ",".join(str(c) for c in row))
+        return
+
+    if updates:
+        ws.batch_update(
+            [{"range": f"A{rn}:{last_col}{rn}", "values": [row]} for rn, row in updates],
+            value_input_option="USER_ENTERED",
+        )
+    for row in sorted(inserts, key=lambda r: _date_key(r[0])):
+        ws.insert_row(row, index=2, value_input_option="USER_ENTERED")
+    if updates or inserts:
+        print(f"Website: {len(updates)} updated, {len(inserts)} inserted.")
+    else:
+        print(f"Website: up to date ({len(metrics)} day(s) available, all current).")
+
+
 def cmd_refresh(args):
-    """Update marketing stats: both the Marketing tab and the App Store Connect tab."""
+    """Update marketing stats: the Marketing, App Store Connect, and Website tabs."""
     refresh_marketing(args)
     refresh_appstore(args)
+    refresh_website(args)
 
 
 def main():
