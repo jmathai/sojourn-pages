@@ -30,8 +30,7 @@ One row per post:
 
 One row per day, newest at the top. Left columns are the daily totals from the
 Acquisition dashboard; the right columns break **First-Time Downloads** down by
-source, matching the Marketing tab's `Medium` values (`Other` first, then a column
-per channel). Add a new source column when a new `Medium` appears.
+Apple's `Source Type`, so they always sum to First-Time Downloads.
 
 | Column | Meaning |
 | --- | --- |
@@ -40,8 +39,9 @@ per channel). Add a new source column when a new `Medium` appears.
 | `Page Views` | Product page views |
 | `First-Time Downloads` | New downloads |
 | `Redownloads` | Redownloads |
-| `Conversion` | Conversion rate |
-| `Other`, `LinkedIn`, `Reddit`, `HackerNews`, ... | First-time downloads attributed to each source |
+| `Page View Conversion` | Downloads &divide; page views |
+| `Impression Conversion` | Downloads &divide; impressions |
+| `App Store Search`, `App Store Browse`, `Web Referrer`, `App Referrer`, `Other` | First-time downloads by Apple `Source Type` (`Web Referrer` is the collective social/links bucket) |
 
 ## Setup (one time)
 
@@ -151,22 +151,27 @@ It runs two steps:
 1. **Marketing tab** — crawls every `Reddit` and `HackerNews` row, fetches the post
    or comment, and writes back **Upvotes** and **Comments**.
 2. **App Store Connect tab** — reads the analytics reports, aggregates them into one
-   row per calendar date, and inserts only the dates not already in the sheet, **most
-   recent day on top** (row 1 is the header, row 2 is a totals row, so new days go in at
-   row 3, pushing older days down; the totals-row formulas are re-pinned to start at row 3
-   after each insert, since Sheets would otherwise bump the range past the new day).
-   Impressions,
-   page views, downloads, and redownloads come from the **Standard** reports, which
-   carry the complete daily totals. Skips gracefully with a message while Apple is
-   still provisioning the reports.
+   row per calendar date, and **upserts**, **most recent day on top** (row 1 is the
+   header, row 2 is a totals row, so new days go in at row 3, pushing older days down;
+   the totals-row formulas are re-pinned to start at row 3 after each insert, since
+   Sheets would otherwise bump the range past the new day). A date already in the sheet
+   is **rewritten in place** when its numbers change, because Apple revises the most
+   recent days for a day or two after they first appear (so a midday run sees partial
+   numbers that later fill in). New days are inserted; older days that have aged out of
+   Apple's reporting window are left untouched. Impressions, page views, downloads, and
+   redownloads come from the **Standard** reports, which carry the complete daily totals
+   and stay a step ahead of the Detailed reports. Skips gracefully with a message while
+   Apple is still provisioning the reports.
 
-   **Source attribution caveat.** Splitting First-Time Downloads into the per-channel
-   columns (Reddit / LinkedIn / HackerNews) needs the referrer domain, which lives in
-   the `Source Info` field of the **`App Downloads Detailed`** report. Apple gates
-   Detailed reports behind a volume threshold, so for a low-volume app that report has
-   **0 instances** and every download falls into **`Other`**. The code already reads
-   `Source Info` and maps it via `appstore.SOURCE_CHANNELS`, so the channel columns
-   populate automatically once the Detailed download report starts provisioning.
+   **Source attribution.** First-time downloads are split by Apple's `Source Type`
+   (`App Store Search`, `App Store Browse`, `Web Referrer`, `App Referrer`, `Other`) from
+   the same **Standard** report, mapped via `appstore.SOURCE_TYPES`. This is complete and
+   not thresholded, so the columns always sum to First-Time Downloads. The site-level
+   referrer domain (Reddit vs LinkedIn vs HackerNews) lives only in the `Source Info`
+   field of the volume-gated **Detailed** report, which Apple withholds at low volume, so
+   link-driven installs are reported collectively as **`Web Referrer`** rather than per
+   site. If Apple starts emitting domains at higher volume, `Web Referrer` can be split
+   back out from `Source Info`.
 
 - Random sleeps between requests (`--min-sleep` / `--max-sleep`, seconds) keep it
   gentle on the sites. Reddit backs off and retries on 403/429.

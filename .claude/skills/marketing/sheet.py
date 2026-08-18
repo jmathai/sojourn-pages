@@ -208,7 +208,7 @@ def hn_stats(url):
 
 APPSTORE_COLUMNS = [
     "Date", "Impressions", "Page Views", "First-Time Downloads", "Redownloads",
-    "Conversion", "Other", "LinkedIn", "Reddit", "HackerNews",
+    "Page View Conversion", "Impression Conversion", *appstore.SOURCE_COLUMNS,
 ]
 
 
@@ -221,14 +221,16 @@ def mdy(iso_date):
 def appstore_row(metrics):
     """Build a sheet row (APPSTORE_COLUMNS order) from an appstore.daily_rows() entry."""
     imp = metrics["impressions"]
+    pv = metrics["page_views"]
     total = metrics["first_time_downloads"] + metrics["redownloads"]
-    conversion = f"{round(100 * total / imp, 1)}%" if imp else ""
+    pv_conversion = f"{round(100 * total / pv, 1)}%" if pv else ""
+    imp_conversion = f"{round(100 * total / imp, 1)}%" if imp else ""
     sources = metrics["sources"]
     return [
-        mdy(metrics["date"]), imp, metrics["page_views"],
-        metrics["first_time_downloads"], metrics["redownloads"], conversion,
-        sources.get("Other", 0), sources.get("LinkedIn", 0),
-        sources.get("Reddit", 0), sources.get("HackerNews", 0),
+        mdy(metrics["date"]), imp, pv,
+        metrics["first_time_downloads"], metrics["redownloads"],
+        pv_conversion, imp_conversion,
+        *(sources.get(c, 0) for c in appstore.SOURCE_COLUMNS),
     ]
 
 
@@ -253,15 +255,15 @@ def pin_totals_row(ws):
     totals. Re-pinning the start back to row 3 keeps every day counted, whatever
     function each cell uses (SUM, AVERAGE, ...). A no-op when row 2 holds no formulas.
     """
-    formulas = (ws.get("A2:J2", value_render_option="FORMULA") or [[]])[0]
-    formulas += [""] * (10 - len(formulas))
+    formulas = (ws.get("A2:L2", value_render_option="FORMULA") or [[]])[0]
+    formulas += [""] * (12 - len(formulas))
     pinned = [
         re.sub(r"([A-Za-z]+\()([A-Z]+)\d+", r"\g<1>\g<2>3", f, count=1)
         if isinstance(f, str) and f.startswith("=") else f
         for f in formulas
     ]
     if pinned != formulas:
-        ws.update([pinned], "A2:J2", value_input_option="USER_ENTERED")
+        ws.update([pinned], "A2:L2", value_input_option="USER_ENTERED")
 
 
 def _date_key(mdy_str):
@@ -317,7 +319,13 @@ def refresh_marketing(args):
 
 
 def refresh_appstore(args):
-    """Update the App Store Connect tab from the analytics report, most recent day on top."""
+    """Upsert the App Store Connect tab from the analytics report, most recent day on top.
+
+    Apple revises the most recent days for a day or two after they first appear, so a
+    date already in the sheet is rewritten in place when its numbers change, not just
+    skipped. New days are inserted; older days that have aged out of Apple's reporting
+    window are left as they are.
+    """
     try:
         metrics = appstore.daily_rows()
     except Exception as e:
@@ -328,20 +336,44 @@ def refresh_appstore(args):
         return
 
     ws = worksheet(APPSTORE_SHEET)
-    existing = {row[0] for row in ws.get_all_values()[1:] if row}
-    fresh = [m for m in metrics if mdy(m["date"]) not in existing]
-    rows = [appstore_row(m) for m in fresh]
+    grid = ws.get_all_values()
+    date_row = {r[0]: i + 1 for i, r in enumerate(grid) if i >= 2 and r and r[0]}
+
+    # The conversion columns (indices 5 and 6) are derived from page views,
+    # impressions, and downloads, which are compared directly, and the sheet reformats
+    # their percent, so they're left out of the change check to avoid rewriting every
+    # row on every run.
+    def comparable(cells):
+        return [c for i, c in enumerate(cells) if i not in (5, 6)]
+
+    updates, inserts = [], []
+    for m in metrics:
+        row = appstore_row(m)
+        rn = date_row.get(row[0])
+        if rn is None:
+            inserts.append(row)
+        elif comparable([str(c) for c in row]) != comparable((grid[rn - 1] + [""] * 12)[:12]):
+            updates.append((rn, row))
 
     if args.dry_run:
-        print(f"App Store: {len(metrics)} day(s) available, {len(rows)} new (dry run):")
-        for row in sorted(rows, key=lambda r: r[0]):
-            print("  " + ",".join(str(c) for c in row))
+        print(f"App Store: {len(metrics)} day(s) available, {len(updates)} changed, {len(inserts)} new (dry run):")
+        for _, row in sorted(updates):
+            print("  update " + ",".join(str(c) for c in row))
+        for row in sorted(inserts, key=lambda r: _date_key(r[0])):
+            print("  insert " + ",".join(str(c) for c in row))
         return
-    if not rows:
-        print(f"App Store: up to date ({len(metrics)} day(s) available, all present).")
-        return
-    insert_appstore_rows(rows)
-    print(f"App Store: inserted {len(rows)} day(s).")
+
+    if updates:
+        ws.batch_update(
+            [{"range": f"A{rn}:L{rn}", "values": [row]} for rn, row in updates],
+            value_input_option="USER_ENTERED",
+        )
+    if inserts:
+        insert_appstore_rows(inserts)
+    if updates or inserts:
+        print(f"App Store: {len(updates)} updated, {len(inserts)} inserted.")
+    else:
+        print(f"App Store: up to date ({len(metrics)} day(s) available, all current).")
 
 
 def cmd_refresh(args):

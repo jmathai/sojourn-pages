@@ -18,14 +18,18 @@ BASE = "https://api.appstoreconnect.apple.com"
 DOWNLOADS_REPORT = "App Downloads Detailed"
 ENGAGEMENT_REPORT = "App Store Discovery and Engagement Detailed"
 
-# Referrer domains Apple reports, mapped to the Marketing sheet's Medium names.
-# Everything not listed collapses into "Other".
-SOURCE_CHANNELS = {
-    "reddit.com": "Reddit",
-    "news.ycombinator.com": "HackerNews",
-    "linkedin.com": "LinkedIn",
-    "lnkd.in": "LinkedIn",
+# Apple's download Source Type, mapped to the App Store tab's source columns.
+# Apple only exposes the referrer domain (Reddit vs LinkedIn) in the privacy-
+# thresholded Detailed report, which withholds it at low volume, so downloads are
+# attributed by Source Type instead. Anything unlisted collapses into "Other" so the
+# columns always sum to first-time downloads.
+SOURCE_TYPES = {
+    "app store search": "App Store Search",
+    "app store browse": "App Store Browse",
+    "web referrer": "Web Referrer",
+    "app referrer": "App Referrer",
 }
+SOURCE_COLUMNS = ("App Store Search", "App Store Browse", "Web Referrer", "App Referrer", "Other")
 
 
 def _config():
@@ -83,21 +87,16 @@ def instance_count():
     return total
 
 
-# Standard reports carry the complete daily aggregates (Detailed reports are
-# privacy-thresholded and often unprovisioned for low-volume apps). Downloads
-# prefer Detailed only because it adds the Source Info domain used to attribute a
-# web-referrer download to a channel; without it every referral falls to "Other".
-DOWNLOADS_PREFERENCE = ("App Downloads Detailed", "App Downloads Standard")
+# The Standard reports carry the complete daily aggregates (totals and Source Type),
+# and stay a step ahead of the privacy-thresholded Detailed reports. Everything the
+# App Store tab needs comes from these two.
+DOWNLOADS_STANDARD = "App Downloads Standard"
 ENGAGEMENT_STANDARD = "App Store Discovery and Engagement Standard"
 
 
-def _channel(row):
-    """Map a download row's referrer domain (Detailed only) to a Medium, else 'Other'."""
-    info = (row.get("Source Info") or "").lower()
-    for domain, name in SOURCE_CHANNELS.items():
-        if domain in info:
-            return name
-    return "Other"
+def _source(row):
+    """Map a download row's Apple Source Type to a source column, else 'Other'."""
+    return SOURCE_TYPES.get((row.get("Source Type") or "").strip().lower(), "Other")
 
 
 def _instances(kid, state, name, _cache={}):
@@ -127,18 +126,21 @@ def daily_rows():
     key, state = _config()
     kid = key["key_id"]
 
-    dl_name = next((n for n in DOWNLOADS_PREFERENCE if _instances(kid, state, n)), None)
+    # Daily totals and Source Type attribution from the Standard report, which is
+    # complete and freshest. First-time downloads are bucketed by Source Type, so the
+    # source buckets always sum to the first-time total.
     downloads = {}
-    for _, iid in _instances(kid, state, dl_name) if dl_name else []:
+    for _, iid in _instances(kid, state, DOWNLOADS_STANDARD):
         window = {}
         for r in _download_instance(kid, iid):
             slot = window.setdefault(r["Date"], {"first": 0, "redownloads": 0, "sources": {}})
             count = int(r.get("Counts") or 0)
-            if r.get("Download Type") == "First-time download":
+            dtype = r.get("Download Type")
+            if dtype == "First-time download":
                 slot["first"] += count
-                chan = _channel(r)
-                slot["sources"][chan] = slot["sources"].get(chan, 0) + count
-            elif r.get("Download Type") == "Redownload":
+                bucket = _source(r)
+                slot["sources"][bucket] = slot["sources"].get(bucket, 0) + count
+            elif dtype == "Redownload":
                 slot["redownloads"] += count
         downloads.update(window)
 
