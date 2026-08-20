@@ -26,6 +26,7 @@ One row per post:
 | `Clicks` | Referral clicks to the site |
 | `Link` | URL to the post |
 | `Notes` | Free text, e.g. `moderated` |
+| `Views Checked` | `M/D/YYYY` a Reddit row's view count was last scraped (skill-managed; see refresh) |
 
 ## App Store Connect tab
 
@@ -174,7 +175,13 @@ means update the Marketing, App Store Connect, and Website tabs.**
 It runs three steps:
 
 1. **Marketing tab** — crawls every `Reddit` and `HackerNews` row, fetches the post
-   or comment, and writes back **Upvotes** and **Comments**.
+   or comment, and writes back **Upvotes** and **Comments** (fast JSON, every run).
+   **Views** are a slower, rate-limited Reddit HTML scrape, so they refresh every run
+   only for recent posts (within `VIEW_RECENT_DAYS` of the row's `Date`) and otherwise
+   only when the `Views Checked` date has gone stale (`VIEW_STALE_DAYS`). The long
+   politeness sleep (`--min-sleep`/`--max-sleep`) is taken only on rows that scraped
+   views; other rows get a short sleep. `--all-views` forces a view scrape on every row
+   (the occasional full pass for older posts).
 2. **App Store Connect tab** — reads the analytics reports, aggregates them into one
    row per calendar date, and **upserts**, **most recent day on top** (row 1 is the
    header, row 2 is a totals row, so new days go in at row 3, pushing older days down;

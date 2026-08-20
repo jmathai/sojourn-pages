@@ -3,6 +3,7 @@
 import argparse
 import json
 import random
+from datetime import date
 import re
 import sys
 import time
@@ -26,6 +27,9 @@ APPSTORE_SHEET = "App Store Connect"
 WEBSITE_SHEET = "Website"
 WEBSITE_COLUMNS = ["Date", *posthog.EVENTS]
 COLUMNS = ["Date", "Medium", "Upvotes", "Comments", "Views", "Clicks", "Link", "Notes"]
+VIEWS_CHECKED_COL = "I"  # date views were last scraped for a Reddit row (M/D/YYYY)
+VIEW_RECENT_DAYS = 5     # posts this new get their view count rescraped every refresh
+VIEW_STALE_DAYS = 7      # older posts get it rescraped only this often
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
 
 
@@ -275,11 +279,44 @@ def _date_key(mdy_str):
     return (y, m, d)
 
 
+def _parse_mdy(value):
+    """'M/D/YYYY' -> date, or None if blank/unparseable."""
+    try:
+        m, d, y = (int(x) for x in value.strip().split("/"))
+        return date(y, m, d)
+    except (ValueError, AttributeError):
+        return None
+
+
+def _needs_views(row, today, force):
+    """Whether to rescrape a Reddit row's view count this run.
+
+    Recent posts (or undated ones) every run; older posts only once their last check in
+    the Views Checked column has gone stale. The view scrape is a slow, rate-limited
+    HTML fetch, so gating it keeps a routine refresh fast.
+    """
+    if force:
+        return True
+    added = _parse_mdy(row[0] if row else "")
+    if added is None or (today - added).days <= VIEW_RECENT_DAYS:
+        return True
+    checked = _parse_mdy(row[8] if len(row) > 8 else "")
+    return checked is None or (today - checked).days >= VIEW_STALE_DAYS
+
+
 def refresh_marketing(args):
-    """Update the Marketing tab: scrape Reddit and Hacker News rows for upvotes and comments."""
+    """Update the Marketing tab: scrape Reddit and Hacker News rows for upvotes and comments.
+
+    Upvotes and comments (fast JSON) refresh on every run. The Reddit view count (a
+    slower, rate-limited HTML scrape) refreshes every run for recent posts and only when
+    stale for older ones (see _needs_views); the long politeness sleep is taken only on
+    the rows that actually did a view scrape. --all-views forces it on every row.
+    """
     fetchers = {"reddit": reddit_stats, "hackernews": hn_stats}
     ws = worksheet(MARKETING_SHEET)
     rows = ws.get_all_values()
+    today = date.today()
+    today_mdy = mdy(today.isoformat())
     updates = []
     changed_rows = set()
     for i, row in enumerate(rows[1:], start=2):
@@ -297,8 +334,9 @@ def refresh_marketing(args):
             print(f"row {i}: skip (unrecognized URL) {link}")
             continue
         up, cm = stats["upvotes"], stats["comments"]
-        views = reddit_views(link) if medium == "reddit" else None
-        suffix = f" views={views}" if views is not None else ""
+        scrape_views = medium == "reddit" and _needs_views(row, today, args.all_views)
+        views = reddit_views(link) if scrape_views else None
+        suffix = f" views={views}" if views is not None else (" views=checked" if scrape_views else "")
         print(f"row {i}: upvotes={up} comments={cm}{suffix}  {link}")
         if not args.dry_run:
             if up is not None:
@@ -310,10 +348,16 @@ def refresh_marketing(args):
             if views is not None:
                 updates.append({"range": f"E{i}", "values": [[str(views)]]})
                 changed_rows.add(i)
-        time.sleep(random.uniform(args.min_sleep, args.max_sleep))
+            if scrape_views:
+                updates.append({"range": f"{VIEWS_CHECKED_COL}{i}", "values": [[today_mdy]]})
+                changed_rows.add(i)
+        if scrape_views:
+            time.sleep(random.uniform(args.min_sleep, args.max_sleep))
+        else:
+            time.sleep(random.uniform(0.2, 0.6))
 
     if args.dry_run:
-        print("(dry run — nothing written; Views are left untouched, neither API exposes them)")
+        print("(dry run — nothing written)")
     elif updates:
         ws.batch_update(updates, value_input_option="USER_ENTERED")
         print(f"Marketing: updated {len(changed_rows)} rows (upvotes and/or comments).")
@@ -461,8 +505,9 @@ def main():
 
     refresh = sub.add_parser("refresh", help="Scrape Reddit rows, update upvotes and comments")
     refresh.add_argument("--dry-run", action="store_true", help="Print what would change, write nothing")
-    refresh.add_argument("--min-sleep", type=float, default=3.0, help="Min seconds between requests")
-    refresh.add_argument("--max-sleep", type=float, default=7.0, help="Max seconds between requests")
+    refresh.add_argument("--all-views", action="store_true", help="Rescrape Reddit view counts on every row, not just recent/stale ones")
+    refresh.add_argument("--min-sleep", type=float, default=3.0, help="Min seconds between view scrapes")
+    refresh.add_argument("--max-sleep", type=float, default=7.0, help="Max seconds between view scrapes")
     refresh.set_defaults(func=cmd_refresh)
 
     args = parser.parse_args()
