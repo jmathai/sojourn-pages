@@ -39,6 +39,10 @@ topics/
 - Regenerate the sitemap and llms.txt after adding or removing a topic: run
   `python3 generate_seo.py` from the repo root (it discovers topic pages by scanning
   `topics/`).
+- Refresh structured data after adding or editing a topic: run `python3 topic_jsonld.py`.
+  It rebuilds each page's Article + BreadcrumbList + FAQPage JSON-LD from the page's own
+  title, description, and visible `.q`/`.a` conversation (idempotent, between the
+  `SOJOURN-JSONLD` markers), so the FAQ schema always matches the on-page Q&A.
 - Every topic also ships a generated `og.png` social card and per-topic OG/Twitter meta
   tags — see **Social share image (og.png)** below. Regenerate the image whenever the
   topic's title, subhead, or accent word changes.
