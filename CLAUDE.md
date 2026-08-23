@@ -71,6 +71,16 @@ header, footer, and all `<style>` untouched:
 - `<title>` → `{title} &middot; Sojourn`
 - `<meta name="description">` → the post's derived `summary` (see below), for search results
 - `<link rel="canonical">` → `https://trysojourn.app/writings/<slug>/`
+- Author + article metadata (for search and answer-engine attribution):
+  `<meta name="author">` and `article:author` → `{author}`; `og:type` → `article`;
+  `article:published_time` → `{date}`; `article:modified_time` → the date the body last
+  changed (`{date}` until then).
+- Social card: `og:site_name` `Sojourn`, `og:title` `{title}`, `og:description` (the
+  summary), `og:url` (the canonical), `og:image` `/assets/shot-peek.png`, and the matching
+  `twitter:` summary_large_image tags.
+- JSON-LD `BlogPosting`: `headline` `{title}`, `description` (summary), `url` +
+  `mainEntityOfPage` (canonical), `datePublished`/`dateModified` (as above), `inLanguage`
+  `en`, `image` `/assets/shot-peek.png`, `author` a Person `{author}`, publisher Sojourn.
 - `.post-meta` → `{category}`
 - `<h1>` → `{title}`
 - `.byline` → `By <b>{author}</b> &middot; {read_time} min read`
