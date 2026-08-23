@@ -36,8 +36,9 @@ topics/
   slug (e.g. `envy` → `topics/envy/index.html`, served at `/topics/envy/`).
 - Update `topics/index.html` whenever a topic is added, removed, or its card state
   (live vs. "coming soon") changes.
-- Regenerate the sitemap after adding or removing a topic: run `python3 generate_sitemap.py`
-  from the repo root (it discovers topic pages by scanning `topics/`).
+- Regenerate the sitemap and llms.txt after adding or removing a topic: run
+  `python3 generate_seo.py` from the repo root (it discovers topic pages by scanning
+  `topics/`).
 - Every topic also ships a generated `og.png` social card and per-topic OG/Twitter meta
   tags — see **Social share image (og.png)** below. Regenerate the image whenever the
   topic's title, subhead, or accent word changes.

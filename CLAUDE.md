@@ -145,5 +145,5 @@ regenerate `writings/index.html` from `blog-list-template.html`:
 - The templates in the repo root are the single source of truth for chrome and
   styling. Do not fork their CSS into posts — copy the template, swap the content.
 - Post links are always root-absolute: `/writings/<slug>/`.
-- After adding or removing a post, regenerate the sitemap: run `python3 generate_sitemap.py`
-  from the repo root (it discovers posts by scanning `writings/`).
+- After adding or removing a post, regenerate the sitemap and llms.txt: run
+  `python3 generate_seo.py` from the repo root (it discovers posts by scanning `writings/`).

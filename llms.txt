@@ -1,0 +1,27 @@
+# Sojourn
+
+> A quiet place to read and reflect on scripture. See what the Bible says about anxiety, grief, fear, and more, with every verse a door into the chapter around it.
+
+Sojourn is an iOS app and website (https://trysojourn.app) for reading and reflecting on scripture. Each topic below is a study that quotes the World English Bible verbatim, with every verse a door into the chapter around it.
+
+## Topics
+- [Topics](https://trysojourn.app/topics/): Topical scripture studies, read what the Bible knows about what you're carrying.
+- [What the Bible Says About Anger](https://trysojourn.app/topics/anger/): A Bible study on anger from Sojourn: what scripture knows about the heat that rises before we choose. Every verse is a door into the chapter around it.
+- [What the Bible Says About Anxiety](https://trysojourn.app/topics/anxiety/): A Bible study on anxiety from Sojourn: what scripture offers a mind that will not be still. Every verse is a door into the chapter around it.
+- [What the Bible Says About Contentment](https://trysojourn.app/topics/contentment/): A Bible study on contentment from Sojourn: what scripture knows about the peace of having enough. Every verse is a door into the chapter around it.
+- [What the Bible Says About Despair](https://trysojourn.app/topics/despair/): A Bible study on despair from Sojourn: how scripture stays when hope is gone, and never fakes the light. Every verse is a door into the chapter around it.
+- [What the Bible Says About Envy](https://trysojourn.app/topics/envy/): A Bible study on envy from Sojourn: what scripture knows about wanting what isn't yours. Every verse is a door into the chapter around it.
+- [What the Bible Says About Fear](https://trysojourn.app/topics/fear/): A Bible study on fear from Sojourn: what scripture says to the part of you that is afraid. Every verse is a door into the chapter around it.
+- [What the Bible Says About Generosity](https://trysojourn.app/topics/generosity/): A Bible study on generosity from Sojourn: what scripture knows about the freedom of an open hand. Every verse is a door into the chapter around it.
+- [What the Bible Says About Grief](https://trysojourn.app/topics/grief/): A Bible study on grief from Sojourn: how scripture keeps company with sorrow, without ever rushing it. Every verse is a door into the chapter around it.
+- [What the Bible Says About Lust](https://trysojourn.app/topics/lust/): A Bible study on lust from Sojourn: how scripture names it plainly, and still holds out a clean heart. Every verse is a door into the chapter around it.
+- [What the Bible Says About Obedience](https://trysojourn.app/topics/obedience/): A Bible study on obedience from Sojourn: what scripture knows about the love that keeps its word. Every verse is a door into the chapter around it.
+- [What the Bible Says About Sadness](https://trysojourn.app/topics/sadness/): A Bible study on sadness from Sojourn: how scripture honors it, and the good it quietly grows. Every verse is a door into the chapter around it.
+
+## Writings
+- [Notes & readings](https://trysojourn.app/writings/): Notes and readings from Sojourn on scripture, reading the Bible slowly, and the quiet work of paying attention to the text.
+- [Explore the Bible like Wikipedia](https://trysojourn.app/writings/explore-the-bible-like-wikipedia/): Why Sojourn lets you explore the Bible like Wikipedia: every verse is a door into the chapter around it, so you can follow a thread without losing your place.
+- [Welcome to Sojourn](https://trysojourn.app/writings/welcome-to-sojourn/): An introduction to Sojourn, a quiet, unhurried way to read and reflect on scripture, one passage at a time.
+
+## About
+- [Privacy · Your reading is yours alone](https://trysojourn.app/privacy/)

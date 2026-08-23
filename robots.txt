@@ -1,3 +1,5 @@
+# Search crawlers and AI answer engines are welcome.
+# AI agents: /llms.txt is a curated map of the site.
 User-agent: *
 Allow: /
 Disallow: /whats-new/
