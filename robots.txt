@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /whats-new/
+
+Sitemap: https://trysojourn.app/sitemap.xml

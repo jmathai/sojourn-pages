@@ -69,6 +69,8 @@ Start from `blog-template.html` and replace the placeholder content, keeping the
 header, footer, and all `<style>` untouched:
 
 - `<title>` → `{title} &middot; Sojourn`
+- `<meta name="description">` → the post's derived `summary` (see below), for search results
+- `<link rel="canonical">` → `https://trysojourn.app/writings/<slug>/`
 - `.post-meta` → `{category}`
 - `<h1>` → `{title}`
 - `.byline` → `By <b>{author}</b> &middot; {read_time} min read`
@@ -143,3 +145,5 @@ regenerate `writings/index.html` from `blog-list-template.html`:
 - The templates in the repo root are the single source of truth for chrome and
   styling. Do not fork their CSS into posts — copy the template, swap the content.
 - Post links are always root-absolute: `/writings/<slug>/`.
+- After adding or removing a post, regenerate the sitemap: run `python3 generate_sitemap.py`
+  from the repo root (it discovers posts by scanning `writings/`).
