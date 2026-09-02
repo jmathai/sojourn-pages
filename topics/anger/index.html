@@ -83,8 +83,8 @@
   /* ---- chrome ---- */
   .site-head{max-width:680px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
   .site-head a.mark{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
-  .site-head .get{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--cite);text-decoration:none;border-bottom:1px solid var(--cite-line);}
-  .site-head .get:hover{color:#164a86;border-bottom-color:#164a86;}
+  .site-head .get{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.01em;color:var(--cite);text-decoration:none;}
+  .site-head .get:hover{color:#164a86;}
   .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:20px;}
   .site-foot .inner{max-width:680px;margin:0 auto;padding:34px 28px;font-family:var(--sans);font-size:13px;color:rgba(247,243,234,.6);}
   .site-foot .travels{margin-bottom:22px;}
@@ -334,7 +334,7 @@
   <!-- HEADER -->
   <header class="site-head">
     <a href="/" class="mark"><span style="color:var(--rubric);">S</span>ojourn</a>
-    <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" class="get">Get the app</a>
+    <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" class="get"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.14 9.14.76 1.1 1.66 2.34 2.85 2.29 1.14-.05 1.57-.74 2.95-.74 1.38 0 1.77.74 2.98.71 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.09 6.02c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.1 1.76-.96 2.79 1.02.08 2.06-.51 2.7-1.26z"/></svg>Download Sojourn on the App Store</a>
   </header>
 
   <!-- OPENING REFLECTION -->
@@ -768,7 +768,7 @@
   });
 
   // handoff affordances
-  function goHandoff(){ ph('topic_handoff', {topic:'anger', source:'composer'}); window.location.href='https://apps.apple.com/us/app/trysojourn/id6792011966'; }
+  function goHandoff(){ ph('topic_handoff', {topic:'anger', source:'composer'}); ph('app_store_click', {location:'composer'}); window.location.href='https://apps.apple.com/us/app/trysojourn/id6792011966'; }
   var comp=document.querySelector('[data-handoff]');
   if(comp){ comp.addEventListener('click', goHandoff); comp.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); goHandoff(); } }); }
   var ctaLink=document.querySelector('[data-handoff-link]');
@@ -777,6 +777,11 @@
   // non-iOS notify line
   var isIOS=/iPad|iPhone|iPod/.test(navigator.platform)||(navigator.userAgent.indexOf('Mac')>-1 && 'ontouchend' in document);
   if(!isIOS){ var n=document.querySelector('[data-non-ios]'); if(n) n.hidden=false; }
+
+  // App Store link clicks
+  Array.prototype.slice.call(document.querySelectorAll('a[href*="apps.apple.com"]')).forEach(function(a){
+    a.addEventListener('click', function(){ ph('app_store_click', {location: a.classList.contains('get') ? 'header' : 'handoff'}); });
+  });
 })();
 </script>
 </body>

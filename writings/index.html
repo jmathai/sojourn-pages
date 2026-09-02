@@ -39,6 +39,8 @@
   .site-head{max-width:720px;margin:0 auto;padding:30px 28px 0;display:flex;align-items:baseline;justify-content:space-between;}
   .site-head a{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.01em;color:var(--ink);text-decoration:none;}
   .site-head .note{font-family:var(--sans);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);}
+  .site-head .get{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.01em;color:var(--cite);text-decoration:none;}
+  .site-head .get:hover{color:#164a86;}
   .site-foot{background:var(--ink);border-top:1px solid rgba(247,243,234,.12);margin-top:80px;}
   .site-foot .inner{max-width:720px;margin:0 auto;padding:26px 28px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:rgba(247,243,234,.55);}
   .site-foot .inner .mark{font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);text-decoration:none;}
@@ -66,6 +68,15 @@
     .post-item h2{font-size:24px;}
     .post-item .summary{font-size:18px;}
   }
+
+  /* app store badge */
+  .app-cta{max-width:720px;margin:48px auto 0;padding:0 28px;}
+  .app-cta .inner{display:flex;flex-direction:column;align-items:center;}
+  .app-cta h2{font-family:var(--serif);font-weight:600;font-size:34px;line-height:1.14;letter-spacing:-.01em;color:var(--ink);text-align:center;text-wrap:pretty;margin-bottom:24px;}
+  .app-badge{display:inline-flex;align-items:center;gap:11px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:14px;padding:13px 24px 13px 20px;}
+  .app-badge .label{display:flex;flex-direction:column;line-height:1.1;text-align:left;}
+  .app-badge .top{font-family:var(--sans);font-size:11px;letter-spacing:.02em;opacity:.72;}
+  .app-badge .store{font-family:var(--sans);font-size:20px;font-weight:600;letter-spacing:-.01em;}
 </style>
 </head>
 <body>
@@ -73,7 +84,7 @@
   <!-- HEADER (keep) -->
   <header class="site-head">
     <a href="/"><span style="color:var(--rubric);">S</span>ojourn</a>
-    <span class="note">Notes &amp; readings</span>
+    <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" class="get"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.14 9.14.76 1.1 1.66 2.34 2.85 2.29 1.14-.05 1.57-.74 2.95-.74 1.38 0 1.77.74 2.98.71 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.09 6.02c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.1 1.76-.96 2.79 1.02.08 2.06-.51 2.7-1.26z"/></svg>Download Sojourn on the App Store</a>
   </header>
 
   <!-- INDEX -->
@@ -100,6 +111,17 @@
     </ul>
   </main>
 
+  <!-- APP STORE CTA (keep) -->
+  <div class="app-cta">
+    <div class="inner">
+      <h2>Get Sojourn today, for free.</h2>
+      <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" class="app-badge">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#F7F3EA" aria-hidden="true"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.14 9.14.76 1.1 1.66 2.34 2.85 2.29 1.14-.05 1.57-.74 2.95-.74 1.38 0 1.77.74 2.98.71 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.09 6.02c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.1 1.76-.96 2.79 1.02.08 2.06-.51 2.7-1.26z"/></svg>
+        <span class="label"><span class="top">Download on the</span><span class="store">App Store</span></span>
+      </a>
+    </div>
+  </div>
+
   <!-- FOOTER (keep) -->
   <footer class="site-foot">
     <div class="inner">
@@ -108,5 +130,15 @@
     </div>
   </footer>
 
+  <script>
+    // App Store link clicks
+    Array.prototype.slice.call(document.querySelectorAll('a[href*="apps.apple.com"]')).forEach(function(a){
+      a.addEventListener('click', function(){
+        if(!window.posthog) return;
+        var l = a.classList.contains('get') ? 'header' : a.classList.contains('app-badge') ? 'footer_cta' : 'link';
+        posthog.capture('app_store_click', { location: l });
+      });
+    });
+  </script>
 </body>
 </html>
