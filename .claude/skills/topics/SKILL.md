@@ -109,8 +109,9 @@ whenever a post is added or its title or summary changes, and point the post's
 longer than a topic subhead, the subhead shrinks to stay clear of the wordmark footer.
 
 **The home card** is the exception: its copy is fixed in the generator ("Sojourn" over
-"Stay awhile in scripture.") rather than scraped, and it drops the wordmark footer,
-because on that card the title already is the wordmark.
+"Stay awhile in scripture.") rather than scraped, and in place of the wordmark footer it
+carries `trysojourn.app`, because on that card the title already is the wordmark. The
+address is the card's only call to action, and it stays a plain line of text on purpose.
 
 Topic cards are unaffected by any of this. The generator is deterministic, so
 regenerating all 11 existing topic cards reproduces them byte for byte.

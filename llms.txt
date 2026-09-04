@@ -1,6 +1,6 @@
 # Sojourn
 
-> A quiet place to read and reflect on scripture. See what the Bible says about anxiety, grief, fear, and more, with every verse a door into the chapter around it.
+> A quiet place to read and reflect on scripture. See what the Bible says about anxiety, grief, and fear. Every verse is a door into the chapter around it.
 
 Sojourn is an iOS app and website (https://trysojourn.app) for reading and reflecting on scripture. Each topic below is a study that quotes the World English Bible verbatim, with every verse a door into the chapter around it.
 
@@ -20,8 +20,8 @@ Sojourn is an iOS app and website (https://trysojourn.app) for reading and refle
 
 ## Writings
 - [Notes & readings](https://trysojourn.app/writings/): Notes and readings from Sojourn on scripture, reading the Bible slowly, and the quiet work of paying attention to the text.
-- [Explore the Bible like Wikipedia](https://trysojourn.app/writings/explore-the-bible-like-wikipedia/): Why Sojourn lets you explore the Bible like Wikipedia: every verse is a door into the chapter around it, so you can follow a thread without losing your place.
+- [Explore the Bible like Wikipedia](https://trysojourn.app/writings/explore-the-bible-like-wikipedia/): Scripture is full of cross references. Sojourn lets you follow them like Wikipedia links, with every verse a door into the chapter around it.
 - [Welcome to Sojourn](https://trysojourn.app/writings/welcome-to-sojourn/): An introduction to Sojourn, a quiet, unhurried way to read and reflect on scripture, one passage at a time.
 
 ## About
-- [Privacy · Your reading is yours alone](https://trysojourn.app/privacy/)
+- [Privacy · Your reading is yours alone](https://trysojourn.app/privacy/): Sojourn is built to be a quiet, private place. No account, no tracking, and nothing you read or ask ever leaves your device.

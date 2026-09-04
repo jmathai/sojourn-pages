@@ -137,7 +137,7 @@ LAYOUT = {
     "topic":    dict(title_cy=236, max_lines=3, max_bottom=None, footer=True),
     "writing":  dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
     "writings": dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
-    "home":     dict(title_cy=278, max_lines=2, max_bottom=None, footer=False),
+    "home":     dict(title_cy=268, max_lines=2, max_bottom=None, footer=False),
 }
 
 SURFACES = {
@@ -175,6 +175,10 @@ def generate(kind="topic", slug=None):
         mark = font(46, "SemiBold")
         draw_runs(d, [("S", RED), ("ojourn", INK)], mark, 512)
         draw_centered(d, "Stay awhile in scripture.", font(27, "Regular"), 560, MUTED)
+    else:
+        # The home card carries the address instead of the wordmark footer: it says
+        # where to go without turning a quiet card into an ad.
+        draw_centered(d, "trysojourn.app", font(28, "Regular"), 536, MUTED)
 
     out = os.path.join(REPO, *out_parts)
     img.save(out, "PNG")
