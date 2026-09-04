@@ -161,3 +161,6 @@ regenerate `writings/index.html` from `blog-list-template.html`:
 - Post links are always root-absolute: `/writings/<slug>/`.
 - After adding or removing a post, regenerate the sitemap and llms.txt: run
   `python3 generate_seo.py` from the repo root (it discovers posts by scanning `writings/`).
+- Before pushing, run `python3 generate_seo.py --check`. It exits non-zero if the sitemap
+  or `llms.txt` is stale, or if any page is missing its canonical, is missing a meta
+  description, has one over 160 characters, or carries invalid JSON-LD.

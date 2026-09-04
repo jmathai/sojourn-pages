@@ -4,4 +4,12 @@ User-agent: *
 Allow: /
 Disallow: /whats-new/
 
+# Served, but never a search result: the templates pages are rendered from
+# (they hold placeholder copy) and the unlinked phone demo.
+Disallow: /blog-template.html
+Disallow: /blog-list-template.html
+Disallow: /topic-template.html
+Disallow: /topic-list-template.html
+Disallow: /sojourn-phone-demo.html
+
 Sitemap: https://trysojourn.app/sitemap.xml
