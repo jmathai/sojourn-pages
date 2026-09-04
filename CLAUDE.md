@@ -76,11 +76,15 @@ header, footer, and all `<style>` untouched:
   `article:published_time` → `{date}`; `article:modified_time` → the date the body last
   changed (`{date}` until then).
 - Social card: `og:site_name` `Sojourn`, `og:title` `{title}`, `og:description` (the
-  summary), `og:url` (the canonical), `og:image` `/assets/shot-peek.png`, and the matching
+  summary), `og:url` (the canonical), `og:image` `/writings/<slug>/og.png` (with
+  `og:image:width` 1200, `og:image:height` 630, and an `og:image:alt`), and the matching
   `twitter:` summary_large_image tags.
+- Social share card: generate `writings/<slug>/og.png` with the topics skill's generator,
+  `generate_og.py writing:<slug>`. It reads the post's own `og:title` and `og:description`,
+  so render those tags first. Regenerate whenever the title or summary changes.
 - JSON-LD `BlogPosting`: `headline` `{title}`, `description` (summary), `url` +
   `mainEntityOfPage` (canonical), `datePublished`/`dateModified` (as above), `inLanguage`
-  `en`, `image` `/assets/shot-peek.png`, `author` a Person `{author}`, publisher Sojourn.
+  `en`, `image` `/writings/<slug>/og.png`, `author` a Person `{author}`, publisher Sojourn.
 - `.post-meta` → `{category}`
 - `<h1>` → `{title}`
 - `.byline` → `By <b>{author}</b> &middot; {read_time} min read`

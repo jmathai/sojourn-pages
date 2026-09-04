@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
-# Generates a topic's 1200x630 social share image from its rendered index.html.
+# Generates a 1200x630 social share image from a rendered index.html.
 # Reads title / subhead / accent word from the HTML (the single source of truth).
+#
+# Three surfaces share one visual system and one code path:
+#   topic:<slug>   topics/<slug>/og.png      title + subhead + Sojourn wordmark footer
+#   writing:<slug> writings/<slug>/og.png    same, for a post
+#   writings       writings/og.png           the notes index
+#   home           assets/og-home.png        the wordmark itself, so no footer
 import os, re, sys, html, argparse
 from PIL import Image, ImageDraw, ImageFont
 
@@ -40,6 +46,32 @@ def read_topic(slug):
     if not title or not subhead:
         raise SystemExit(f"could not read title/subhead from {path}")
     return title, subhead, accent
+
+def _meta(prop, doc):
+    """Read an og: meta value from a rendered page."""
+    m = re.search(rf'<meta property="og:{prop}" content="([^"]*)"', doc)
+    return html.unescape(m.group(1)).strip() if m else None
+
+
+def read_writing(slug):
+    """A post's card copy comes from the og: tags already authored on its page."""
+    path = os.path.join(REPO, "writings", slug, "index.html")
+    doc = open(path, encoding="utf-8").read()
+    title, subhead = _meta("title", doc), _meta("description", doc)
+    if not title or not subhead:
+        raise SystemExit(f"could not read og:title/og:description from {path}")
+    return title, subhead, None          # no accent word: posts are titled, not themed
+
+
+def read_writings_index():
+    path = os.path.join(REPO, "writings", "index.html")
+    doc = open(path, encoding="utf-8").read()
+    title = _text(r'<h1[^>]*>(.*?)</h1>', doc) or "Notes & readings"
+    subhead = _meta("description", doc) or _text(r'<p[^>]*class="index-lede"[^>]*>(.*?)</p>', doc)
+    if not subhead:
+        raise SystemExit(f"could not read a subhead from {path}")
+    return title, subhead, None
+
 
 def title_runs(title, accent):
     """Split the title into colored runs, accent phrase in red."""
@@ -83,32 +115,101 @@ def fit_title(draw, title, start=164, min_size=64, max_w=1000):
         size -= 2
     return font(size, "SemiBold"), size
 
-def generate(slug):
-    title, subhead, accent = read_topic(slug)
+def fit_subhead(draw, text, top, max_w=900, start=44, min_size=30,
+                max_lines=3, max_bottom=None):
+    """Shrink the subhead until it fits max_lines and, if given, stays above
+    max_bottom. Post teasers run longer than topic subheads, and a three-line
+    block at 44px would collide with the wordmark footer."""
+    size = start
+    while size > min_size:
+        f = font(size, "Regular", italic=True)
+        lines = wrap(draw, text, f, max_w)
+        bottom = top + (len(lines) - 1) * (size + 16)
+        if len(lines) <= max_lines and (max_bottom is None or bottom <= max_bottom):
+            break
+        size -= 2
+    f = font(size, "Regular", italic=True)
+    return f, size, wrap(draw, text, f, max_w)
+
+
+# title_cy, subhead max lines, subhead floor, footer wordmark
+LAYOUT = {
+    "topic":    dict(title_cy=236, max_lines=3, max_bottom=None, footer=True),
+    "writing":  dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
+    "writings": dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
+    "home":     dict(title_cy=278, max_lines=2, max_bottom=None, footer=False),
+}
+
+SURFACES = {
+    "topic":    lambda slug: (read_topic(slug),         ("topics", slug, "og.png")),
+    "writing":  lambda slug: (read_writing(slug),       ("writings", slug, "og.png")),
+    "writings": lambda slug: (read_writings_index(),    ("writings", "og.png")),
+    # The home card is the wordmark itself, so its copy is fixed here rather than
+    # scraped: the page's og:title carries the tagline too, which would read twice.
+    "home":     lambda slug: (("Sojourn", "Stay awhile in scripture.", "S"),
+                              ("assets", "og-home.png")),
+}
+
+
+def generate(kind="topic", slug=None):
+    (title, subhead, accent), out_parts = SURFACES[kind](slug)
+    accent = accent if accent is not None else ""
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
 
+    lay = LAYOUT[kind]
+    title_cy = lay["title_cy"]
+
     title_font, tsize = fit_title(d, title)
-    title_cy = 236
     draw_runs(d, title_runs(title, accent), title_font, title_cy)
 
-    sub_font = font(44, "Regular", italic=True)
-    lines = wrap(d, subhead, sub_font, 900)
-    step = 60
     top = title_cy + tsize / 2 + 60
+    sub_font, ssize, lines = fit_subhead(d, subhead, top,
+                                         max_lines=lay["max_lines"],
+                                         max_bottom=lay["max_bottom"])
+    step = ssize + 16
     for i, line in enumerate(lines):
         draw_centered(d, line, sub_font, top + i * step, MUTED)
 
-    mark = font(46, "SemiBold")
-    draw_runs(d, [("S", RED), ("ojourn", INK)], mark, 512)
-    draw_centered(d, "Stay awhile in scripture.", font(27, "Regular"), 560, MUTED)
+    if lay["footer"]:
+        mark = font(46, "SemiBold")
+        draw_runs(d, [("S", RED), ("ojourn", INK)], mark, 512)
+        draw_centered(d, "Stay awhile in scripture.", font(27, "Regular"), 560, MUTED)
 
-    out = os.path.join(REPO, "topics", slug, "og.png")
+    out = os.path.join(REPO, *out_parts)
     img.save(out, "PNG")
-    print(f"wrote {out}  ({W}x{H})  title='{title}' accent='{accent}'")
+    print(f"wrote {os.path.relpath(out, REPO)}  ({W}x{H})  title='{title}'")
     return out
 
+
+def parse_target(target):
+    """'envy' -> ('topic','envy'); 'writing:welcome' -> ('writing','welcome'); 'home' -> ('home',None)"""
+    if target in ("home", "writings"):
+        return target, None
+    kind, _, slug = target.partition(":")
+    if not slug:
+        return "topic", kind          # bare slug stays a topic, as the skill documented
+    if kind not in SURFACES:
+        raise SystemExit(f"unknown surface '{kind}'; expected one of {', '.join(SURFACES)}")
+    return kind, slug
+
+
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description="Generate a topic's OG share image from its index.html")
-    ap.add_argument("slug", help="topic slug, e.g. envy")
-    generate(ap.parse_args().slug)
+    ap = argparse.ArgumentParser(description="Generate a Sojourn OG share image from a rendered page")
+    ap.add_argument("target", nargs="?",
+                    help="topic slug (e.g. envy), writing:<slug>, writings, or home")
+    ap.add_argument("--all", action="store_true",
+                    help="regenerate every card on the site")
+    args = ap.parse_args()
+
+    if args.all:
+        for p in sorted((__import__("pathlib").Path(REPO) / "topics").glob("*/index.html")):
+            generate("topic", p.parent.name)
+        for p in sorted((__import__("pathlib").Path(REPO) / "writings").glob("*/index.html")):
+            generate("writing", p.parent.name)
+        generate("writings")
+        generate("home")
+    elif args.target:
+        generate(*parse_target(args.target))
+    else:
+        ap.error("give a target, or --all")

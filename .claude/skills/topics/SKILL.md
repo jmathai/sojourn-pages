@@ -90,6 +90,31 @@ topic is created, or its title/subhead/accent changes:
 "$VENV/bin/python" .claude/skills/topics/generate_og.py <slug>
 ```
 
+The same generator makes the cards for the rest of the site, so every surface shares one
+visual system and one code path:
+
+```bash
+"$VENV/bin/python" .claude/skills/topics/generate_og.py writing:<slug>   # writings/<slug>/og.png
+"$VENV/bin/python" .claude/skills/topics/generate_og.py writings         # writings/og.png
+"$VENV/bin/python" .claude/skills/topics/generate_og.py home             # assets/og-home.png
+"$VENV/bin/python" .claude/skills/topics/generate_og.py --all            # every card
+```
+
+A bare slug still means a topic, so the topic command above is unchanged.
+
+**Writing cards** take their title and subhead from the post's own `og:title` and
+`og:description`, so the card and the search snippet can never disagree. Generate one
+whenever a post is added or its title or summary changes, and point the post's
+`og:image` and `twitter:image` at `/writings/<slug>/og.png`. Because a post teaser runs
+longer than a topic subhead, the subhead shrinks to stay clear of the wordmark footer.
+
+**The home card** is the exception: its copy is fixed in the generator ("Sojourn" over
+"Stay awhile in scripture.") rather than scraped, and it drops the wordmark footer,
+because on that card the title already is the wordmark.
+
+Topic cards are unaffected by any of this. The generator is deterministic, so
+regenerating all 11 existing topic cards reproduces them byte for byte.
+
 `generate_og.py` reads the topic's `index.html` (the single source of truth): the title from
 `<h1 class="topic">`, the subhead from `.subhead`, and the accent word from an optional
 `data-og-accent` attribute on the `<h1>`. The vendored **EB Garamond** font lives in
