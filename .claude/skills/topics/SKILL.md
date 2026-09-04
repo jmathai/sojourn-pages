@@ -96,6 +96,7 @@ visual system and one code path:
 ```bash
 "$VENV/bin/python" .claude/skills/topics/generate_og.py writing:<slug>   # writings/<slug>/og.png
 "$VENV/bin/python" .claude/skills/topics/generate_og.py writings         # writings/og.png
+"$VENV/bin/python" .claude/skills/topics/generate_og.py topics           # topics/og.png
 "$VENV/bin/python" .claude/skills/topics/generate_og.py home             # assets/og-home.png
 "$VENV/bin/python" .claude/skills/topics/generate_og.py --all            # every card
 ```

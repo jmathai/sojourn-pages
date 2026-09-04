@@ -6,6 +6,7 @@
 #   topic:<slug>   topics/<slug>/og.png      title + subhead + Sojourn wordmark footer
 #   writing:<slug> writings/<slug>/og.png    same, for a post
 #   writings       writings/og.png           the notes index
+#   topics         topics/og.png             the topics index
 #   home           assets/og-home.png        the wordmark itself, so no footer
 import os, re, sys, html, argparse
 from PIL import Image, ImageDraw, ImageFont
@@ -137,6 +138,7 @@ LAYOUT = {
     "topic":    dict(title_cy=236, max_lines=3, max_bottom=None, footer=True),
     "writing":  dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
     "writings": dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
+    "topics":   dict(title_cy=236, max_lines=2, max_bottom=452,  footer=True),
     "home":     dict(title_cy=268, max_lines=2, max_bottom=None, footer=False),
 }
 
@@ -144,6 +146,12 @@ SURFACES = {
     "topic":    lambda slug: (read_topic(slug),         ("topics", slug, "og.png")),
     "writing":  lambda slug: (read_writing(slug),       ("writings", slug, "og.png")),
     "writings": lambda slug: (read_writings_index(),    ("writings", "og.png")),
+    # The topics index borrows its title from the page and names a few of the
+    # studies outright, which the page's own lede is too general to do.
+    "topics":   lambda slug: (("Start where you are.",
+                               "Anxiety, grief, envy, and the rest of what you carry.",
+                               None),
+                              ("topics", "og.png")),
     # The home card is the wordmark itself, so its copy is fixed here rather than
     # scraped: the page's og:title carries the tagline too, which would read twice.
     "home":     lambda slug: (("Sojourn", "Stay awhile in scripture.", "S"),
@@ -188,7 +196,7 @@ def generate(kind="topic", slug=None):
 
 def parse_target(target):
     """'envy' -> ('topic','envy'); 'writing:welcome' -> ('writing','welcome'); 'home' -> ('home',None)"""
-    if target in ("home", "writings"):
+    if target in ("home", "writings", "topics"):
         return target, None
     kind, _, slug = target.partition(":")
     if not slug:
@@ -212,6 +220,7 @@ if __name__ == "__main__":
         for p in sorted((__import__("pathlib").Path(REPO) / "writings").glob("*/index.html")):
             generate("writing", p.parent.name)
         generate("writings")
+        generate("topics")
         generate("home")
     elif args.target:
         generate(*parse_target(args.target))
