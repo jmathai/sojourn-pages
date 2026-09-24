@@ -33,15 +33,34 @@ VIEW_STALE_DAYS = 7      # older posts get it rescraped only this often
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
 
 
-def worksheet(title=MARKETING_SHEET):
-    if not KEY_PATH.exists():
+# cloud-platform is mandatory whenever ADC login requests any extra scope.
+GOOGLE_SCOPES = [
+    "https://www.googleapis.com/auth/cloud-platform",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive",
+]
+
+
+def google_client():
+    """Service-account key if present, else gcloud Application Default Credentials."""
+    if KEY_PATH.exists():
+        return gspread.service_account(filename=str(KEY_PATH))
+    try:
+        import google.auth
+        creds, _ = google.auth.default(scopes=GOOGLE_SCOPES)
+    except Exception as exc:
         sys.exit(
-            f"No service-account key at {KEY_PATH}.\n"
-            "Create one in Google Cloud, share the sheet with its client_email, "
-            "and save the JSON there."
+            f"No Google credentials.\n"
+            f"Either save a service-account key at {KEY_PATH}, or run:\n"
+            "  gcloud auth application-default login \\\n"
+            "    --scopes=" + ",".join(GOOGLE_SCOPES) + "\n"
+            f"({exc})"
         )
-    client = gspread.service_account(filename=str(KEY_PATH))
-    return client.open_by_key(SHEET_ID).worksheet(title)
+    return gspread.authorize(creds)
+
+
+def worksheet(title=MARKETING_SHEET):
+    return google_client().open_by_key(SHEET_ID).worksheet(title)
 
 
 def cmd_list(args):
