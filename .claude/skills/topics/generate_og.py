@@ -64,6 +64,17 @@ def read_writing(slug):
     return title, subhead, None          # no accent word: posts are titled, not themed
 
 
+def read_redemptive():
+    """The scoreboard's card copy comes from the og: tags its generator already wrote, so the
+    card and the search snippet can never disagree. Its subhead runs long, like a post teaser."""
+    path = os.path.join(REPO, "redemptive-ai", "index.html")
+    doc = open(path, encoding="utf-8").read()
+    title, subhead = _meta("title", doc), _meta("description", doc)
+    if not title or not subhead:
+        raise SystemExit(f"could not read og:title/og:description from {path}")
+    return title, subhead, "Redemptive"
+
+
 def read_writings_index():
     path = os.path.join(REPO, "writings", "index.html")
     doc = open(path, encoding="utf-8").read()
@@ -139,6 +150,7 @@ LAYOUT = {
     "writing":  dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
     "writings": dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
     "topics":   dict(title_cy=236, max_lines=2, max_bottom=452,  footer=True),
+    "redemptive": dict(title_cy=214, max_lines=3, max_bottom=452, footer=True),
     "home":     dict(title_cy=268, max_lines=2, max_bottom=None, footer=False),
 }
 
@@ -146,6 +158,7 @@ SURFACES = {
     "topic":    lambda slug: (read_topic(slug),         ("topics", slug, "og.png")),
     "writing":  lambda slug: (read_writing(slug),       ("writings", slug, "og.png")),
     "writings": lambda slug: (read_writings_index(),    ("writings", "og.png")),
+    "redemptive": lambda slug: (read_redemptive(),      ("redemptive-ai", "og.png")),
     # The topics index borrows its title from the page and names a few of the
     # studies outright, which the page's own lede is too general to do.
     "topics":   lambda slug: (("Start where you are.",
@@ -196,7 +209,7 @@ def generate(kind="topic", slug=None):
 
 def parse_target(target):
     """'envy' -> ('topic','envy'); 'writing:welcome' -> ('writing','welcome'); 'home' -> ('home',None)"""
-    if target in ("home", "writings", "topics"):
+    if target in ("home", "writings", "topics", "redemptive"):
         return target, None
     kind, _, slug = target.partition(":")
     if not slug:
@@ -209,7 +222,8 @@ def parse_target(target):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Generate a Sojourn OG share image from a rendered page")
     ap.add_argument("target", nargs="?",
-                    help="topic slug (e.g. envy), writing:<slug>, writings, or home")
+                    help="topic slug (e.g. envy), writing:<slug>, writings, topics, "
+                         "redemptive, or home")
     ap.add_argument("--all", action="store_true",
                     help="regenerate every card on the site")
     args = ap.parse_args()
@@ -221,6 +235,8 @@ if __name__ == "__main__":
             generate("writing", p.parent.name)
         generate("writings")
         generate("topics")
+        if (__import__("pathlib").Path(REPO) / "redemptive-ai" / "index.html").exists():
+            generate("redemptive")
         generate("home")
     elif args.target:
         generate(*parse_target(args.target))

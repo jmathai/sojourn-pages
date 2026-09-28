@@ -879,7 +879,7 @@
     var returnBlock = null;
     resetAll();
 
-    setPhase("1", "A real conversation, verses cited live");
+    setPhase("1", "Ask a question, get verses with the answer");
     sleep(900)
     .then(function(){ if(!alive(id)) return;
       return exchange(chatField, chatSend, chatInner, chatThread, Q1, A1, id, 1.8);
@@ -891,7 +891,7 @@
       return exchange(chatField, chatSend, chatInner, chatThread, Q2, A2, id, 1.8);
     })
     .then(function(){ if(!alive(id)) return;
-      setPhase("2", "Every citation is a door. Tap one");
+      setPhase("2", "Every verse is tappable. Tap one");
       return sleep(1300);
     })
     .then(function(){ if(!alive(id)) return;
@@ -902,7 +902,7 @@
     .then(function(){ if(!alive(id)) return;
       dim.classList.add("on");
       sheet.classList.add("open");
-      setPhase("3", "The peek: the passage in its context");
+      setPhase("3", "A peek at the verse, with the lines around it");
       return sleep(3000);
     })
     .then(function(){ if(!alive(id)) return;
@@ -915,7 +915,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       screens.classList.add("pushed");
-      setPhase("4", "Promoted to a place: the passage node");
+      setPhase("4", "Save it and it becomes a spot you can come back to");
       showPromoteToast();
       return sleep(2100);
     })
@@ -946,7 +946,7 @@
     .then(function(){ if(!alive(id)) return;
       dim.classList.add("on");
       storySheet.classList.add("open");
-      setPhase("6", "A branch: envy as a story");
+      setPhase("6", "Follow it somewhere new: envy as a story");
       return sleep(4200);
     })
     .then(function(){ if(!alive(id)) return;
@@ -962,7 +962,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       nodeField.classList.add("focused");
-      setPhase("7", "Ask right where you stand");
+      setPhase("7", "Ask a question without losing your place");
       return exchange(nodeField, nodeSend, nodeThread, nodeThread, Q3, A3, id);
     })
     .then(function(){ if(!alive(id)) return;
@@ -973,7 +973,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       screens.classList.remove("pushed");
-      setPhase("8", "Put into action, in the same thread");
+      setPhase("8", "Work out what to do with it, right there");
       return sleep(520);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1022,7 +1022,7 @@
     buildDiveRecord(rb).classList.add("show");
     var m3 = addAiMsg(chatInner);
     A4.forEach(function(seg){ if(seg.t){ m3.appendChild(document.createTextNode(seg.t)); } else { var c=document.createElement("span"); c.className="cite"; c.textContent=seg.c; m3.appendChild(c);} });
-    setPhase("&#8226;", "One thread: dives return to the same conversation");
+    setPhase("&#8226;", "It all stays in one thread, right where you left it");
     scrollBottom(chatThread);
     reloadBtn.classList.add("show");
   } else {

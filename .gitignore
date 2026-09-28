@@ -13,5 +13,10 @@ web-backend.sqlite
 .claude/skills/marketing/.reddit-cookie
 .claude/skills/marketing/.hn-cookie
 
+# Reddit outreach skill: script-app credentials for posting comments
+.claude/skills/reddit-outreach/.reddit-oauth.json
+.claude/skills/reddit-outreach/candidates.json
+.claude/skills/reddit-outreach/rows.json
+
 # App Store Connect API key material (analytics)
 .appstoreconnect/

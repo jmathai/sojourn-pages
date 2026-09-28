@@ -118,7 +118,7 @@
     <div>
       <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rubric);font-weight:600;margin-bottom:22px;">Start with a question</p>
       <h1 style="font-family:var(--serif);font-weight:500;font-size:clamp(42px,5vw,62px);line-height:1.06;letter-spacing:-.012em;color:var(--ink);text-wrap:pretty;"><span style="color:var(--rubric);">Stay</span> awhile<br>in scripture.</h1>
-      <p style="font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink-2);margin-top:26px;max-width:30em;text-wrap:pretty;">Ask what you actually wonder. The answer comes back gently and rooted in scripture, and every verse in it opens into the passage around it, so you can read it whole instead of in pieces.</p>
+      <p style="font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink-2);margin-top:26px;max-width:30em;text-wrap:pretty;">Ask whatever&rsquo;s on your mind. The answer comes back kind and full of scripture, and you can tap any verse to read the rest of the chapter.</p>
 
       <div class="lp-hero-cta" style="margin-top:36px;max-width:440px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         <a href="https://apps.apple.com/us/app/trysojourn/id6792011966" style="display:inline-flex;align-items:center;gap:11px;background:#141210;color:#F7F3EA;text-decoration:none;border-radius:14px;padding:13px 22px 13px 18px;">
@@ -1013,7 +1013,7 @@
     var returnBlock = null;
     resetAll();
 
-    setPhase(&quot;1&quot;, &quot;A real conversation, verses cited live&quot;);
+    setPhase(&quot;1&quot;, &quot;Ask a question, get verses with the answer&quot;);
     sleep(900)
     .then(function(){ if(!alive(id)) return;
       return exchange(chatField, chatSend, chatInner, chatThread, Q1, A1, id, 1.8);
@@ -1025,7 +1025,7 @@
       return exchange(chatField, chatSend, chatInner, chatThread, Q2, A2, id, 1.8);
     })
     .then(function(){ if(!alive(id)) return;
-      setPhase(&quot;2&quot;, &quot;Every citation is a door. Tap one&quot;);
+      setPhase(&quot;2&quot;, &quot;Every verse is tappable. Tap one&quot;);
       return sleep(1300);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1036,7 +1036,7 @@
     .then(function(){ if(!alive(id)) return;
       dim.classList.add(&quot;on&quot;);
       sheet.classList.add(&quot;open&quot;);
-      setPhase(&quot;3&quot;, &quot;The peek: the passage in its context&quot;);
+      setPhase(&quot;3&quot;, &quot;A peek at the verse, with the lines around it&quot;);
       return sleep(3000);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1049,7 +1049,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       screens.classList.add(&quot;pushed&quot;);
-      setPhase(&quot;4&quot;, &quot;Promoted to a place: the passage node&quot;);
+      setPhase(&quot;4&quot;, &quot;Save it and it becomes a spot you can come back to&quot;);
       showPromoteToast();
       return sleep(2100);
     })
@@ -1080,7 +1080,7 @@
     .then(function(){ if(!alive(id)) return;
       dim.classList.add(&quot;on&quot;);
       storySheet.classList.add(&quot;open&quot;);
-      setPhase(&quot;6&quot;, &quot;A branch: envy as a story&quot;);
+      setPhase(&quot;6&quot;, &quot;Follow it somewhere new: envy as a story&quot;);
       return sleep(4200);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1096,7 +1096,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       nodeField.classList.add(&quot;focused&quot;);
-      setPhase(&quot;7&quot;, &quot;Ask right where you stand&quot;);
+      setPhase(&quot;7&quot;, &quot;Ask a question without losing your place&quot;);
       return exchange(nodeField, nodeSend, nodeThread, nodeThread, Q3, A3, id);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1107,7 +1107,7 @@
     })
     .then(function(){ if(!alive(id)) return;
       screens.classList.remove(&quot;pushed&quot;);
-      setPhase(&quot;8&quot;, &quot;Put into action, in the same thread&quot;);
+      setPhase(&quot;8&quot;, &quot;Work out what to do with it, right there&quot;);
       return sleep(520);
     })
     .then(function(){ if(!alive(id)) return;
@@ -1156,7 +1156,7 @@
     buildDiveRecord(rb).classList.add(&quot;show&quot;);
     var m3 = addAiMsg(chatInner);
     A4.forEach(function(seg){ if(seg.t){ m3.appendChild(document.createTextNode(seg.t)); } else { var c=document.createElement(&quot;span&quot;); c.className=&quot;cite&quot;; c.textContent=seg.c; m3.appendChild(c);} });
-    setPhase(&quot;&amp;#8226;&quot;, &quot;One thread: dives return to the same conversation&quot;);
+    setPhase(&quot;&amp;#8226;&quot;, &quot;It all stays in one thread, right where you left it&quot;);
     scrollBottom(chatThread);
     reloadBtn.classList.add(&quot;show&quot;);
   } else {
@@ -1176,27 +1176,27 @@
       <div class="lp-promises" style="display:grid;grid-template-columns:1fr 1fr;">
 
         <div style="padding:64px 56px 64px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);">
-          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">A new way</span></div>
-          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">A conversation, not a search box</h2>
-          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">No search box, no feed. You ask a real question and follow it wherever it goes, verse by verse, as slowly as you like.</p>
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">Where it leads</span></div>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Talking gets you into the Bible</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Talking is how you find the verse. Ask what you&rsquo;re actually dealing with and it points you to the part of the Bible that speaks to it, then sticks around while you read.</p>
         </div>
 
         <div style="padding:64px 0 64px 56px;border-bottom:1px solid var(--line);">
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">In context</span></div>
-          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">The whole passage, not a snippet</h2>
-          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Tap any verse and the lines around it come with it. The full chapter is one tap further in. You are not glancing at scripture here, you are reading it.</p>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Tap a verse, get the chapter</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Tap a verse and the lines around it come too. Tap again and you&rsquo;re in the whole chapter. Take your time with it.</p>
         </div>
 
         <div style="padding:64px 56px 64px 0;border-right:1px solid var(--line);">
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">Exactly as written</span></div>
           <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Every verse, exactly as written</h2>
-          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Scripture is never generated, paraphrased, or guessed. When a verse appears, it is the text itself, word for word. Nothing approximated, nothing invented.</p>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">The verses come straight from the Bible, word for word. Every one gets checked against the text before it ever shows up on your screen.</p>
         </div>
 
         <div style="padding:64px 0 64px 56px;">
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;"><span style="font-family:var(--serif);color:var(--rubric);font-size:22px;font-weight:600;line-height:1;">&para;</span><span style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;">Answered with care</span></div>
-          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Answered gently, never pushed</h2>
-          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">Answers come the way a patient friend gives them: plain, kind, and rooted in scripture. Ask anything, however small. Nobody is going to rush you or talk you into anything.</p>
+          <h2 style="font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.16;color:var(--ink);margin-bottom:14px;">Answers that go easy on you</h2>
+          <p style="font-family:var(--serif);font-size:18.5px;line-height:1.6;color:var(--ink-2);max-width:32em;text-wrap:pretty;">You get answers the way a good friend gives them: plain, kind, and backed up by scripture. Ask anything, even the small stuff. Take as long as you want with it.</p>
         </div>
 
       </div>
@@ -1260,7 +1260,7 @@
 
   <footer style="position:relative;z-index:2;background:var(--ink);border-top:1px solid rgba(247,243,234,.12);">
     <div class="lp-pad" style="max-width:1180px;margin:0 auto;padding:26px 40px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12.5px;color:rgba(247,243,234,.55);">
-      <span style="display:inline-flex;align-items:baseline;gap:8px;"><span style="font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);"><span style="color:var(--rubric-soft);">S</span>ojourn</span><span>&middot;</span><a href="/topics/" style="color:rgba(247,243,234,.7);">Topics</a><span>&middot;</span><a href="/writings/" style="color:rgba(247,243,234,.7);">Writings</a></span>
+      <span style="display:inline-flex;align-items:baseline;gap:8px;"><span style="font-family:var(--serif);font-size:16px;color:rgba(247,243,234,.85);"><span style="color:var(--rubric-soft);">S</span>ojourn</span><span>&middot;</span><a href="/topics/" style="color:rgba(247,243,234,.7);">Topics</a><span>&middot;</span><a href="/writings/" style="color:rgba(247,243,234,.7);">Writings</a><span>&middot;</span><a href="/redemptive-ai/" style="color:rgba(247,243,234,.7);">Redemptive AI</a></span>
       <span style="display:inline-flex;align-items:baseline;gap:8px;">&copy; <span class="cyear">2026</span><span>&middot;</span><a href="mailto:hello@trysojourn.app" style="color:rgba(247,243,234,.7);">hello@trysojourn.app</a><span>&middot;</span><a href="/privacy/" style="color:rgba(247,243,234,.7);">Privacy</a><script>document.querySelectorAll(".cyear").forEach(function(e){e.textContent=new Date().getFullYear()})</script></span>
     </div>
   </footer>

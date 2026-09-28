@@ -64,6 +64,7 @@ def pages():
     items.append(("/writings/", ROOT / "writings" / "index.html", "0.6"))
     items += [(f"/writings/{p.parent.name}/", p, "0.6")
               for p in sorted((ROOT / "writings").glob("*/index.html"))]
+    items.append(("/redemptive-ai/", ROOT / "redemptive-ai" / "index.html", "0.7"))
     items.append(("/privacy/", ROOT / "privacy" / "index.html", "0.3"))
     return [(url, f, prio) for url, f, prio in items if f.exists()]
 
@@ -124,6 +125,7 @@ def build_llms(items):
 
     section("Topics", "/topics/")
     section("Writings", "/writings/")
+    section("How Sojourn is going", "/redemptive-ai/")
     section("About", "/privacy/")
     return "\n".join(lines) + "\n"
 

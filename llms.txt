@@ -23,5 +23,8 @@ Sojourn is an iOS app and website (https://trysojourn.app) for reading and refle
 - [Explore the Bible like Wikipedia](https://trysojourn.app/writings/explore-the-bible-like-wikipedia/): Scripture is full of cross references. Sojourn lets you follow them like Wikipedia links, with every verse a door into the chapter around it.
 - [Welcome to Sojourn](https://trysojourn.app/writings/welcome-to-sojourn/): An introduction to Sojourn, a quiet, unhurried way to read and reflect on scripture, one passage at a time.
 
+## How Sojourn is going
+- [Redemptive AI](https://trysojourn.app/redemptive-ai/): Sojourn measures one thing: whether AI gets people into scripture and then out of the way. The numbers, updated as we ship, including the ones that look bad.
+
 ## About
 - [Privacy · Your reading is yours alone](https://trysojourn.app/privacy/): Sojourn is built to be a quiet, private place. No account, no tracking, and nothing you read or ask ever leaves your device.

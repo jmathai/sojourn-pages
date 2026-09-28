@@ -38,6 +38,31 @@ a machine.
   or reword. Separate title segments with ` &middot; ` (`·`), never ` — `. The only exception
   is verbatim WEB scripture, which keeps its original punctuation (`&mdash;` included).
 - Prefer plain words, contractions, and concrete images over abstraction.
+- No "this, not that". Say what a thing is and stop. Constructions like "a conversation,
+  not a search box", "the whole passage, not a snippet", "answered gently, never pushed",
+  "read it whole instead of in pieces", or "built rather than argued about" are a tell, and
+  they get worse the more of them sit near each other. Rewrite each one as a plain positive
+  statement. This covers the whole family: `X, not Y`, `not X, but Y`, `X instead of Y`,
+  `X rather than Y`, and `never Y` used for punch. It applies to headings, body copy, and
+  metadata alike.
+- Write the way people actually talk. Short common words over polished ones. "Tap a verse
+  and the lines around it come too" beats "every verse opens into the passage around it".
+  If a sentence sounds like it was written to be admired, rewrite it.
+- Two exceptions, both narrow. A contrast that is the actual point can stay when it is
+  definitional ("time is credited action by action rather than end to end") or when removing
+  it would change the meaning. And verbatim WEB scripture is never touched.
+
+### The topic studies are a separate voice
+
+`/topics/{topic}` study prose (`topics/*/index.html`, `topic-template.html`, and the FAQ
+text mirrored into their JSON-LD) is exempt from the "this, not that" rule. That writing is
+teaching, and its contrasts carry the meaning: "it isn't quite grief, which is tied to a loss
+you can name", "the promise isn't that the loss didn't matter, it's that it gets undone".
+Leave them alone. The rest of the Voice rules, em dashes included, still apply there.
+
+Everything else is product voice and follows the rules above: the home page, `/redemptive-ai/`,
+`/topics/` (the list page chrome, not the studies), `/writings/` list copy, `/privacy/`, the
+demo captions in `index.html` and `sojourn-phone-demo.html`, and all metadata.
 
 ## Post front matter
 

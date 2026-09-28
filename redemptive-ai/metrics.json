@@ -1,0 +1,275 @@
+{
+  "window": {
+    "start": "2026-08-18",
+    "end": "2026-09-24"
+  },
+  "highlights": [
+    {
+      "title": "One message, three chapters",
+      "note": "This is the shape we are building for. The reader opened a conversation they had saved, went straight into Psalm 31, left and came back, read Romans 12, and only then typed anything at all. The single message they sent led to a third chapter. Almost a third of the visit was spent in the text, with the AI barely involved.",
+      "on_day": "2026-09-20",
+      "minutes": 12.6,
+      "scripture_share": 31,
+      "turns": 1,
+      "steps": [
+        {
+          "label": "went back to a saved thread"
+        },
+        {
+          "label": "read Psalm 31",
+          "scripture": true
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "read Romans 12",
+          "scripture": true
+        },
+        {
+          "label": "started a new thread"
+        },
+        {
+          "label": "asked"
+        },
+        {
+          "label": "read Psalm 51",
+          "scripture": true
+        }
+      ]
+    },
+    {
+      "title": "The hallway working as intended",
+      "note": "Three messages, then James 1. One more message, then 2 Corinthians 9. Nearly half this visit was spent reading. It is the pattern the product is supposed to produce: talk long enough to find the passage, then stop talking. Worth saying plainly that the talking came first and mattered.",
+      "on_day": "2026-08-25",
+      "minutes": 10.3,
+      "scripture_share": 49,
+      "turns": 4,
+      "steps": [
+        {
+          "label": "asked 3 times"
+        },
+        {
+          "label": "read James 1",
+          "scripture": true
+        },
+        {
+          "label": "asked"
+        },
+        {
+          "label": "read 2 Corinthians 9",
+          "scripture": true
+        }
+      ]
+    },
+    {
+      "title": "A good visit our own scoreboard scores at 1%",
+      "note": "No messages whatsoever. The reader came back to a saved thread, read John 14, left, came back, read Hebrews 12. By any honest reading this is the best kind of visit there is, and the number at the top of this page counts almost none of it, because both chapters were closed by the reader leaving the app rather than by an action we record. This one visit is the clearest argument for fixing that.",
+      "on_day": "2026-09-10",
+      "minutes": 9.2,
+      "scripture_share": 1,
+      "turns": 0,
+      "steps": [
+        {
+          "label": "went back to a saved thread"
+        },
+        {
+          "label": "read John 14",
+          "scripture": true
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "read Hebrews 12",
+          "scripture": true
+        }
+      ]
+    },
+    {
+      "title": "Thirty two minutes, seventeen messages, no scripture",
+      "note": "The failure case, and not a rare one. Half an hour of conversation, a saved thread reopened partway through, and not one verse opened the whole time. Something kept this person here and it was us, not the text. We do not know what they were carrying and the log will never tell us, but on this page that counts as a visit we got wrong.",
+      "on_day": "2026-09-19",
+      "minutes": 31.9,
+      "scripture_share": 0,
+      "turns": 17,
+      "steps": [
+        {
+          "label": "asked 4 times"
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "went back to a saved thread"
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "asked 3 times"
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "asked twice"
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "asked 4 times"
+        },
+        {
+          "label": "came back",
+          "away": true
+        },
+        {
+          "label": "asked 4 times"
+        }
+      ]
+    }
+  ],
+  "sample": "over a hundred",
+  "metrics": {
+    "scripture_share": 7.7,
+    "reach_rate": 29.8,
+    "scripture_free": 62.5,
+    "turns_to_scripture": 2.0,
+    "keep_reading": 39.7,
+    "session_minutes": 3.0
+  },
+  "guarantees": [
+    {
+      "key": "scriptural_accuracy",
+      "label": "Scriptural accuracy",
+      "value": 100,
+      "state": "Done",
+      "claim": "Every verse anyone reads in Sojourn is the World English Bible text, character for character.",
+      "how": "This is not a number we watch and hope stays high. The AI is not permitted to write scripture at all. It can only emit a marker naming a reference, and the app resolves that marker against the Bible database it ships with and renders the real verse. If what the model pointed at does not line up with the actual wording, the citation falls back to a bare reference rather than show anything uncertain, and a reference the database does not recognise is dropped. There is no path through the app by which a sentence the AI wrote could reach a reader as scripture."
+    }
+  ],
+  "weekly": [
+    {
+      "week": "2026-08-17",
+      "scripture_share": 0.6,
+      "reach_rate": 25.0,
+      "scripture_free": 75.0,
+      "session_minutes": 3.0,
+      "keep_reading": 66.7,
+      "turns_to_scripture": 1.0
+    },
+    {
+      "week": "2026-08-24",
+      "scripture_share": 12.3,
+      "reach_rate": 31.8,
+      "scripture_free": 62.5,
+      "session_minutes": 4.2,
+      "keep_reading": 100.0,
+      "turns_to_scripture": 3.0
+    },
+    {
+      "week": "2026-08-31",
+      "scripture_share": 7.5,
+      "reach_rate": 30.8,
+      "scripture_free": 63.2,
+      "session_minutes": 2.7,
+      "keep_reading": 47.1,
+      "turns_to_scripture": 2.0
+    },
+    {
+      "week": "2026-09-07",
+      "scripture_share": 5.0,
+      "reach_rate": 20.7,
+      "scripture_free": 70.6,
+      "session_minutes": 2.9,
+      "keep_reading": 50.0,
+      "turns_to_scripture": 2.5
+    },
+    {
+      "week": "2026-09-14",
+      "scripture_share": 12.4,
+      "reach_rate": 40.7,
+      "scripture_free": 43.8,
+      "session_minutes": 4.4,
+      "keep_reading": 26.3,
+      "turns_to_scripture": 1.0
+    },
+    {
+      "week": "2026-09-21",
+      "scripture_share": 10.1,
+      "reach_rate": 29.4,
+      "scripture_free": 50.0,
+      "session_minutes": 1.7,
+      "keep_reading": 25.0,
+      "turns_to_scripture": 1.0
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "A citation should be a door, not a footnote",
+      "shipped": "2026-08-19",
+      "state": "shipped",
+      "hypothesis": "If the AI names a verse, most people will not go look it up. But if the verse itself is tappable and opens into the passage around it, the reading happens in the same breath as the answer. The reference is the handoff.",
+      "shipped_as": "Every scripture reference in a reply became tappable, opening a peek of the verse with a way through to the whole chapter.",
+      "note": "This is the interaction everything else on this page measures, so it has no before to compare against. It is the baseline, not a result."
+    },
+    {
+      "title": "A verse on the home screen, before the app is even opened",
+      "shipped": "2026-09-04",
+      "state": "shipped",
+      "hypothesis": "The best version of this product is one you do not open. A widget puts a passage in front of someone during the same glance they were going to spend on notifications, with no conversation involved at all.",
+      "shipped_as": "A home screen widget carrying a verse chosen from the topics a reader has been sitting with.",
+      "note": "Deliberately unmeasured by the numbers above, which only see time inside the app. A reader served entirely by the widget looks like a reader who left, and we think that is the right kind of loss."
+    },
+    {
+      "title": "Let people carry a passage out of the app",
+      "shipped": "2026-09-10",
+      "state": "shipped",
+      "hypothesis": "A conversation that ends when the app closes has not changed anyone's week. If a reader can send the whole thread to their own inbox, the passage outlives the session and turns up again somewhere we cannot see.",
+      "shipped_as": "An \"Email this to me\" option at the foot of every conversation, sending the thread and its scripture.",
+      "note": "Another one we cannot score in-app on purpose. What happens in someone's inbox is outside our instrumentation, and we would rather ship it than only build what we can measure."
+    },
+    {
+      "title": "Give people a first line so they stop composing one",
+      "shipped": "2026-09-11",
+      "state": "shipped",
+      "hypothesis": "A blank prompt makes people explain themselves. They write a careful paragraph, we write a careful paragraph back, and scripture is still two exchanges away. Offering a concrete opening line should collapse the throat-clearing and get to a passage sooner.",
+      "shipped_as": "Two tappable suggestions under the empty chat, one naming a feeling and one asking a question about scripture, reshuffled each time.",
+      "metric": "turns_to_scripture",
+      "before": 2.0,
+      "after": 1.0
+    },
+    {
+      "title": "Search should answer with questions, not verses",
+      "shipped": "2026-09-16",
+      "state": "shipped",
+      "hypothesis": "Keyword search over the Bible is the worst version of this. Someone typing \"envy\" is carrying something, not looking for string matches. If the search returns the questions underneath the word, already answered and already attached to a passage, the reader can skip the conversation entirely and land in the text.",
+      "shipped_as": "A search tab that takes a word and returns the questions beneath it, each arriving with the passage that speaks to it and a way to walk the full chapter.",
+      "metric": "reach_rate",
+      "before": 28.8,
+      "after": 32.4
+    },
+    {
+      "title": "Record when a chapter is closed, not only when it is opened",
+      "state": "next",
+      "hypothesis": "The deepest reading in Sojourn is invisible to us. A reader who opens a chapter and stays there until they put the phone down produces one event and then silence, so our own scoreboard scores that visit as though nothing happened. Until the app reports the close, every scripture figure on this page is too low, and the readers we are serving best are the ones we can see least.",
+      "metric": "scripture_share",
+      "note": "Not built yet. When it ships, the numbers above will rise for reasons that have nothing to do with anyone reading more, and we will say so here rather than quietly take the credit."
+    }
+  ],
+  "method": {
+    "session_gap_minutes": 30,
+    "dwell_cap_seconds": 300,
+    "away_cap_seconds": 60,
+    "chapter_close_instrumented": false
+  },
+  "updated": "2026-09-27"
+}
