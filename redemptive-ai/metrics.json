@@ -65,7 +65,7 @@
     },
     {
       "title": "A good visit our own scoreboard scores at 1%",
-      "note": "No messages whatsoever. The reader came back to a saved thread, read John 14, left, came back, read Hebrews 12. By any honest reading this is the best kind of visit there is, and the number at the top of this page counts almost none of it, because both chapters were closed by the reader leaving the app rather than by an action we record. This one visit is the clearest argument for fixing that.",
+      "note": "No messages whatsoever. The reader came back to a saved thread, read John 14, left, came back, read Hebrews 12. By any honest reading this is the best kind of visit there is, and the number at the top of this page counts almost none of it, because the reader closed both chapters by leaving the app, which we have no way to see. This one visit is the clearest argument for fixing that.",
       "on_day": "2026-09-10",
       "minutes": 9.2,
       "scripture_share": 1,
@@ -90,7 +90,7 @@
     },
     {
       "title": "Thirty two minutes, seventeen messages, no scripture",
-      "note": "The failure case, and not a rare one. Half an hour of conversation, a saved thread reopened partway through, and not one verse opened the whole time. Something kept this person here and it was us, not the text. We do not know what they were carrying and the log will never tell us, but on this page that counts as a visit we got wrong.",
+      "note": "The failure case, and it happens plenty. Half an hour of conversation, a saved thread reopened partway through, and not one verse opened the whole time. Something kept this person here, and it was us doing the talking. We do not know what they were carrying and the log will never tell us, but on this page that counts as a visit we got wrong.",
       "on_day": "2026-09-19",
       "minutes": 31.9,
       "scripture_share": 0,
@@ -152,8 +152,8 @@
       "label": "Scriptural accuracy",
       "value": 100,
       "state": "Done",
-      "claim": "Every verse anyone reads in Sojourn is the World English Bible text, character for character.",
-      "how": "This is not a number we watch and hope stays high. The AI is not permitted to write scripture at all. It can only emit a marker naming a reference, and the app resolves that marker against the Bible database it ships with and renders the real verse. If what the model pointed at does not line up with the actual wording, the citation falls back to a bare reference rather than show anything uncertain, and a reference the database does not recognise is dropped. There is no path through the app by which a sentence the AI wrote could reach a reader as scripture."
+      "claim": "Making sure that every scripture shown to a user is 100% accurate was a non-negotiable before the app was ever published. Our design ensures that it's technically impossible for Sojourn to misquote cited scripture. All scripture, whether it's embedded in the chat response or in the chapter reader, comes directly from a World English Bible database that's bundled into the app.",
+      "how": "The AI is not permitted to write scripture at all. It can only emit a marker naming a reference, and the app resolves that marker against the bundled database and renders the real verse. If what the model pointed at does not line up with the actual wording, the citation falls back to a bare reference and shows no text at all, and a reference the database does not recognise is dropped."
     }
   ],
   "weekly": [
@@ -214,12 +214,12 @@
   ],
   "hypotheses": [
     {
-      "title": "A citation should be a door, not a footnote",
+      "title": "A citation should be a door",
       "shipped": "2026-08-19",
       "state": "shipped",
       "hypothesis": "If the AI names a verse, most people will not go look it up. But if the verse itself is tappable and opens into the passage around it, the reading happens in the same breath as the answer. The reference is the handoff.",
       "shipped_as": "Every scripture reference in a reply became tappable, opening a peek of the verse with a way through to the whole chapter.",
-      "note": "This is the interaction everything else on this page measures, so it has no before to compare against. It is the baseline, not a result."
+      "note": "This is the interaction everything else on this page measures, so it has no before to compare against. It is the baseline everything else gets measured from."
     },
     {
       "title": "A verse on the home screen, before the app is even opened",
@@ -248,21 +248,21 @@
       "after": 1.0
     },
     {
-      "title": "Search should answer with questions, not verses",
+      "title": "Search should answer with questions",
       "shipped": "2026-09-16",
       "state": "shipped",
-      "hypothesis": "Keyword search over the Bible is the worst version of this. Someone typing \"envy\" is carrying something, not looking for string matches. If the search returns the questions underneath the word, already answered and already attached to a passage, the reader can skip the conversation entirely and land in the text.",
+      "hypothesis": "Keyword search over the Bible is the worst version of this. Someone typing \"envy\" is carrying something around. If the search returns the questions underneath the word, already answered and already attached to a passage, the reader can skip the conversation entirely and land in the text.",
       "shipped_as": "A search tab that takes a word and returns the questions beneath it, each arriving with the passage that speaks to it and a way to walk the full chapter.",
       "metric": "reach_rate",
       "before": 28.8,
       "after": 32.4
     },
     {
-      "title": "Record when a chapter is closed, not only when it is opened",
+      "title": "Record when a chapter is closed, too",
       "state": "next",
       "hypothesis": "The deepest reading in Sojourn is invisible to us. A reader who opens a chapter and stays there until they put the phone down produces one event and then silence, so our own scoreboard scores that visit as though nothing happened. Until the app reports the close, every scripture figure on this page is too low, and the readers we are serving best are the ones we can see least.",
       "metric": "scripture_share",
-      "note": "Not built yet. When it ships, the numbers above will rise for reasons that have nothing to do with anyone reading more, and we will say so here rather than quietly take the credit."
+      "note": "Not built yet. When it ships, the numbers above will rise for reasons that have nothing to do with anyone reading more, and we will say so here plainly."
     }
   ],
   "method": {
@@ -271,5 +271,5 @@
     "away_cap_seconds": 60,
     "chapter_close_instrumented": false
   },
-  "updated": "2026-09-27"
+  "updated": "2026-09-28"
 }
