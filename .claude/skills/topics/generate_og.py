@@ -7,6 +7,7 @@
 #   writing:<slug> writings/<slug>/og.png    same, for a post
 #   writings       writings/og.png           the notes index
 #   topics         topics/og.png             the topics index
+#   sermons        sermons/og.png            the church page
 #   home           assets/og-home.png        the wordmark itself, so no footer
 import os, re, sys, html, argparse
 from PIL import Image, ImageDraw, ImageFont
@@ -73,6 +74,16 @@ def read_redemptive():
     if not title or not subhead:
         raise SystemExit(f"could not read og:title/og:description from {path}")
     return title, subhead, "Redemptive"
+
+
+def read_sermons():
+    """The sermons page's card copy comes from its own og: tags, like the scoreboard's."""
+    path = os.path.join(REPO, "sermons", "index.html")
+    doc = open(path, encoding="utf-8").read()
+    title, subhead = _meta("title", doc), _meta("description", doc)
+    if not title or not subhead:
+        raise SystemExit(f"could not read og:title/og:description from {path}")
+    return title, subhead, None
 
 
 def read_writings_index():
@@ -151,6 +162,7 @@ LAYOUT = {
     "writings": dict(title_cy=214, max_lines=3, max_bottom=452,  footer=True),
     "topics":   dict(title_cy=236, max_lines=2, max_bottom=452,  footer=True),
     "redemptive": dict(title_cy=214, max_lines=3, max_bottom=452, footer=True),
+    "sermons":  dict(title_cy=214, max_lines=3, max_bottom=452, footer=True),
     "home":     dict(title_cy=268, max_lines=2, max_bottom=None, footer=False),
 }
 
@@ -159,6 +171,7 @@ SURFACES = {
     "writing":  lambda slug: (read_writing(slug),       ("writings", slug, "og.png")),
     "writings": lambda slug: (read_writings_index(),    ("writings", "og.png")),
     "redemptive": lambda slug: (read_redemptive(),      ("redemptive-ai", "og.png")),
+    "sermons":  lambda slug: (read_sermons(),           ("sermons", "og.png")),
     # The topics index borrows its title from the page and names a few of the
     # studies outright, which the page's own lede is too general to do.
     "topics":   lambda slug: (("Start where you are.",
@@ -209,7 +222,7 @@ def generate(kind="topic", slug=None):
 
 def parse_target(target):
     """'envy' -> ('topic','envy'); 'writing:welcome' -> ('writing','welcome'); 'home' -> ('home',None)"""
-    if target in ("home", "writings", "topics", "redemptive"):
+    if target in ("home", "writings", "topics", "redemptive", "sermons"):
         return target, None
     kind, _, slug = target.partition(":")
     if not slug:
@@ -223,7 +236,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Generate a Sojourn OG share image from a rendered page")
     ap.add_argument("target", nargs="?",
                     help="topic slug (e.g. envy), writing:<slug>, writings, topics, "
-                         "redemptive, or home")
+                         "redemptive, sermons, or home")
     ap.add_argument("--all", action="store_true",
                     help="regenerate every card on the site")
     args = ap.parse_args()
@@ -237,6 +250,8 @@ if __name__ == "__main__":
         generate("topics")
         if (__import__("pathlib").Path(REPO) / "redemptive-ai" / "index.html").exists():
             generate("redemptive")
+        if (__import__("pathlib").Path(REPO) / "sermons" / "index.html").exists():
+            generate("sermons")
         generate("home")
     elif args.target:
         generate(*parse_target(args.target))

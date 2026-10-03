@@ -4,6 +4,9 @@
 
 Sojourn is an iOS app and website (https://trysojourn.app) for reading and reflecting on scripture. Each topic below is a study that quotes the World English Bible verbatim, with every verse a door into the chapter around it.
 
+## Sermons
+- [Sermons](https://trysojourn.app/sermons/): Sojourn turns your church's sermon into a study. A quiet place in the middle of a busy week to reflect on the passages preached and questions asked.
+
 ## Topics
 - [Topics](https://trysojourn.app/topics/): Topical scripture studies, read what the Bible knows about what you're carrying.
 - [What the Bible Says About Anger](https://trysojourn.app/topics/anger/): A Bible study on anger from Sojourn: what scripture knows about the heat that rises before we choose. Every verse is a door into the chapter around it.

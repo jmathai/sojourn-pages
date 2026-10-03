@@ -57,6 +57,7 @@ def pages():
     The in-app /whats-new/ page is intentionally excluded (it is noindex)."""
     items = [
         ("/", ROOT / "index.html", "1.0"),
+        ("/sermons/", ROOT / "sermons" / "index.html", "0.9"),
         ("/topics/", ROOT / "topics" / "index.html", "0.9"),
     ]
     items += [(f"/topics/{p.parent.name}/", p, "0.8")
@@ -123,6 +124,7 @@ def build_llms(items):
             title, desc = meta(f)
             lines.append(f"- [{title}]({BASE}{url})" + (f": {desc}" if desc else ""))
 
+    section("Sermons", "/sermons/")
     section("Topics", "/topics/")
     section("Writings", "/writings/")
     section("How Sojourn is going", "/redemptive-ai/")
