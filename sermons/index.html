@@ -90,10 +90,15 @@
   .sm-tabs{display:flex;gap:4px;padding:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;}
   .sm-tab{border:0;cursor:pointer;padding:9px 16px;border-radius:999px;font-family:var(--sans);font-size:13px;font-weight:600;background:transparent;color:#6B6152;transition:background .2s,color .2s;}
   .sm-tab.is-on{background:#FFFDF8;color:var(--ink);box-shadow:0 1px 3px rgba(34,27,18,.12);}
-  .sm-shot{position:relative;width:100%;border-radius:44px 44px 0 0;overflow:hidden;border:1px solid var(--line);border-bottom:0;height:clamp(420px,52vw,560px);box-shadow:0 -10px 40px rgba(34,27,18,.08);background:#F5F1EA;}
-  .sm-screen{display:block;position:absolute;top:0;left:0;width:100%;opacity:0;transition:opacity .6s ease;}
+  /* Each tab shows half a phone. The list and the study are anchored to the top of
+     their shot, the chat to the bottom of the study shot, so all three share one frame. */
+  .sm-shot{position:relative;width:100%;aspect-ratio:816/887;}
+  /* Only the phone's own edge is rounded; the half the crop invents stays square. */
+  .sm-screen{display:block;position:absolute;inset:0;overflow:hidden;border:1px solid var(--line);border-radius:44px 44px 0 0;background:#F5F1EA;box-shadow:0 14px 44px rgba(34,27,18,.12);opacity:0;transition:opacity .6s ease;}
+  .sm-screen.from-bottom{border-radius:0 0 44px 44px;}
   .sm-screen.is-on{opacity:1;}
-  .sm-screen img{width:100%;height:auto;display:block;}
+  .sm-screen img{position:absolute;top:0;left:0;width:100%;height:auto;}
+  .sm-screen.from-bottom img{top:auto;bottom:0;}
 
   .sm-cell{background:var(--paper);padding:clamp(32px,4vw,48px) clamp(20px,5vw,56px);display:flex;flex-direction:column;gap:10px;}
   .sm-cell .h{font-size:26px;font-weight:500;line-height:1.15;}
@@ -143,8 +148,8 @@
     <span class="lp-topnote" style="font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);">Scripture, unhurried</span>
   </header>
 
-  <section class="sm-hero" style="position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,72px);padding:clamp(32px,6vw,56px) clamp(20px,5vw,64px) 0;align-items:flex-end;max-width:1280px;margin:0 auto;">
-    <div style="flex:1 1 440px;min-width:0;padding-bottom:clamp(8px,8vw,96px);display:flex;flex-direction:column;gap:22px;">
+  <section class="sm-hero" style="position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,72px);padding:clamp(32px,6vw,56px) clamp(20px,5vw,64px) clamp(40px,6vw,72px);align-items:flex-end;max-width:1280px;margin:0 auto;">
+    <div style="flex:1 1 440px;min-width:0;padding-bottom:clamp(4px,3vw,32px);display:flex;flex-direction:column;gap:22px;">
       <p class="sm-eyebrow">Sermons</p>
       <h1 style="font-family:var(--serif);font-weight:500;font-size:clamp(44px,7vw,76px);line-height:1;letter-spacing:-.02em;color:var(--ink);text-wrap:balance;">Sunday&rsquo;s sermon, opened on a Tuesday night.</h1>
       <p style="font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.2vw,24px);line-height:1.45;color:var(--ink-2);max-width:24em;text-wrap:pretty;">Sojourn turns your church&rsquo;s sermon into a study. A quiet place in the middle of your busy week to reflect on the passages preached and questions asked.</p>
@@ -158,8 +163,9 @@
     </div>
     <div class="sm-shots">
       <div class="sm-tabs" role="tablist" aria-label="Screens">
-        <button class="sm-tab is-on" role="tab" type="button" id="tab-list" aria-controls="screen-list" aria-selected="true">Sermon list</button>
-        <button class="sm-tab" role="tab" type="button" id="tab-detail" aria-controls="screen-detail" aria-selected="false">Sermon study</button>
+        <button class="sm-tab is-on" role="tab" type="button" id="tab-list" aria-controls="screen-list" aria-selected="true">Sermons</button>
+        <button class="sm-tab" role="tab" type="button" id="tab-detail" aria-controls="screen-detail" aria-selected="false">Study</button>
+        <button class="sm-tab" role="tab" type="button" id="tab-chat" aria-controls="screen-chat" aria-selected="false">Chat</button>
       </div>
       <div class="sm-shot" id="sm-stage">
         <picture class="sm-screen is-on" id="screen-list" role="tabpanel" aria-labelledby="tab-list">
@@ -168,7 +174,11 @@
         </picture>
         <picture class="sm-screen" id="screen-detail" role="tabpanel" aria-labelledby="tab-detail" aria-hidden="true">
           <source srcset="/assets/shot-sermon-detail.webp" type="image/webp">
-          <img src="/assets/shot-sermon-detail.jpg" width="816" height="1774" alt="A sermon study in Sojourn, with the passages preached and questions to explore" decoding="async">
+          <img src="/assets/shot-sermon-detail.jpg" width="816" height="1774" alt="A sermon study in Sojourn, with the passages that were preached" decoding="async">
+        </picture>
+        <picture class="sm-screen from-bottom" id="screen-chat" role="tabpanel" aria-labelledby="tab-chat" aria-hidden="true">
+          <source srcset="/assets/shot-sermon-detail.webp" type="image/webp">
+          <img src="/assets/shot-sermon-detail.jpg" width="816" height="1774" alt="The questions a sermon study opens with, and the box for asking your own" decoding="async">
         </picture>
       </div>
     </div>
@@ -283,11 +293,11 @@
     });
   });
 
-  // Hero screens: the two shots cross-fade on their own until someone picks one,
+  // Hero screens: the three shots cross-fade on their own until someone picks one,
   // and the cycle holds while the pointer is over the phone.
   var stage = document.getElementById('sm-stage');
-  var tabs = [document.getElementById('tab-list'), document.getElementById('tab-detail')];
-  var screens = [document.getElementById('screen-list'), document.getElementById('screen-detail')];
+  var tabs = ['tab-list', 'tab-detail', 'tab-chat'].map(function(id){ return document.getElementById(id); });
+  var screens = ['screen-list', 'screen-detail', 'screen-chat'].map(function(id){ return document.getElementById(id); });
   if(stage && tabs[0] && screens[0]){
     var cur = 0, paused = false, manual = false;
     var slow = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -309,7 +319,7 @@
     stage.addEventListener('mouseleave', function(){ paused = false; });
     if(!slow){
       setInterval(function(){
-        if(!paused && !manual) show(cur === 0 ? 1 : 0);
+        if(!paused && !manual) show((cur + 1) % screens.length);
       }, 4500);
     }
   }
