@@ -177,6 +177,55 @@ regenerate `writings/index.html` from `blog-list-template.html`:
 </li>
 ```
 
+## Images
+
+Every raster asset lives in `assets/` and is served from `/assets/<name>`. Screenshots are
+the heaviest thing the site ships, so they are always resized and re-encoded before they
+land in the repo. Never commit a file straight out of Photos, Downloads, or a simulator.
+
+**Required tools.** `brew install jpeg-turbo webp`. Check with `which cjpeg cwebp jpegtran`
+before encoding anything. `sips` ships with macOS and is fine for resizing, but its JPEG
+encoder is much worse than libjpeg-turbo (it produced 128KB where `cjpeg` produced 73KB on
+the same picture), and it writes top-down BMPs that `cjpeg` rejects with `Empty BMP image`,
+so convert through PPM when piping between them.
+
+**Every image ships as both WebP and JPEG**, as a `<picture>` with the WebP first:
+
+```html
+<picture>
+  <source srcset="/assets/<name>.webp" type="image/webp">
+  <img src="/assets/<name>.jpg" width="816" height="1766" alt="..." decoding="async">
+</picture>
+```
+
+WebP runs roughly 40% smaller than JPEG at the same visible quality, so it is worth the
+second file every time. `<source>` wins over `<img>`, which means **a stale `.webp` beside a
+new `.jpg` silently serves the old picture to most browsers**. Regenerate both together or
+delete both.
+
+**Encoding.** Resize to the width the page actually renders (816 for the phone shots), then
+take exactly one lossy step from the most original source available. Encoding a JPEG that
+came from another JPEG stacks generation loss, so reach for the PNG or the screenshot
+original when there is one.
+
+```
+sips --resampleWidth 816 -s format bmp in.png --out t.bmp   # resize, lossless
+cjpeg -quality 80 -progressive -optimize -sample 1x1 -outfile out.jpg t.ppm
+cwebp -q 80 -m 6 in.png -o out.webp
+```
+
+Keep `-sample 1x1` (no chroma subsampling) on anything with text in it; the screenshots are
+all text. Quality 80 holds up on serif body copy. `jpegtran -copy none -optimize -progressive`
+is a free lossless pass that also strips metadata, so run it and keep the result if smaller.
+
+**Crossfading two shots.** When one screenshot fades into another to animate something (the
+notification landing on `/sermons/`), the two files must be identical everywhere except the
+part that changes, or the whole frame shimmers. Two captures of the same screen are not
+identical: a PNG and a JPEG of the same moment differ by several levels on every pixel.
+Crop the changing region out of one capture and lay that strip over the other with CSS
+rather than crossfading two full frames. It removes the shimmer completely and the strip is
+a fraction of the bytes (23KB instead of a second 161KB frame).
+
 ## Rules
 
 - Editing a post's markdown means re-rendering **both** `writings/<slug>/index.html`
