@@ -4,6 +4,9 @@
 
 Sojourn is an iOS app and website (https://trysojourn.app) for reading and reflecting on scripture. Each topic below is a study that quotes the World English Bible verbatim, with every verse a door into the chapter around it.
 
+## Search
+- [Search](https://trysojourn.app/search/): Bible search that does the looking for you. Bring a word or a whole thought and Sojourn finds the questions underneath and the scripture that answers them.
+
 ## Sermons
 - [Sermons](https://trysojourn.app/sermons/): Sojourn turns your church's sermon into a study. A quiet place in the middle of a busy week to reflect on the passages preached and questions asked.
 

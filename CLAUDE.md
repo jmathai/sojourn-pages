@@ -239,9 +239,9 @@ it ends, and a leftover delta of 4 is invisible alone but reads as a streak on f
 
 ## Header navigation
 
-Every public page carries the same header nav, so a reader can always reach the two
-surfaces the app itself has tabs for. It mirrors the app: **Chat** is the home page
-(`/`) and **Sermons** is `/sermons/`.
+Every public page carries the same header nav, so a reader can always reach the
+surfaces the app itself has tabs for. It mirrors the app, in the app's own tab order:
+**Chat** is the home page (`/`), **Search** is `/search/`, and **Sermons** is `/sermons/`.
 
 The wordmark and the nav sit together in a left-hand group; whatever the page already
 had on the right (the `Scripture, unhurried` note, or the App Store link) stays put.
@@ -250,15 +250,17 @@ had on the right (the `Scripture, unhurried` note, or the App Store link) stays 
 <header class="site-head">
   <div class="head-left">
     <a href="/" class="mark"><span style="color:var(--rubric);">S</span>ojourn</a>
-    <nav class="site-nav" aria-label="Site"><a href="/">Chat</a><a href="/sermons/">Sermons</a></nav>
+    <nav class="site-nav" aria-label="Site"><a href="/">Chat</a><a href="/search/">Search</a><a href="/sermons/">Sermons</a></nav>
   </div>
   <a href="https://apps.apple.com/..." class="get">...</a>
 </header>
 ```
 
 - Mark the current page with `aria-current="page"` on its own link, and only there. The
-  home page sets it on Chat, `/sermons/` sets it on Sermons, every other page sets it on
-  neither.
+  home page sets it on Chat, `/search/` on Search, `/sermons/` on Sermons, and every other
+  page sets it on none of them.
+- Adding a tab means touching every page and all four templates at once. Keep the order
+  the same as the app's tab bar, so the two read alike.
 - The nav's font is declared on `.site-nav a` itself, never left to inherit. Some pages
   style `.site-head a` directly, and that rule would otherwise render the nav in 22px serif.
 - The header is `flex-wrap:wrap` with `gap:10px 16px`. Without it the mark, the nav, and
