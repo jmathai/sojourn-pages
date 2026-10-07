@@ -237,12 +237,46 @@ falls below its own background (`alpha = (bg - pixel) / bg`, then `out = bg_targ
 Watch the soft edges: the island's antialiasing trails four rows past where it looks like
 it ends, and a leftover delta of 4 is invisible alone but reads as a streak on flat paper.
 
+## Header navigation
+
+Every public page carries the same header nav, so a reader can always reach the two
+surfaces the app itself has tabs for. It mirrors the app: **Chat** is the home page
+(`/`) and **Sermons** is `/sermons/`.
+
+The wordmark and the nav sit together in a left-hand group; whatever the page already
+had on the right (the `Scripture, unhurried` note, or the App Store link) stays put.
+
+```html
+<header class="site-head">
+  <div class="head-left">
+    <a href="/" class="mark"><span style="color:var(--rubric);">S</span>ojourn</a>
+    <nav class="site-nav" aria-label="Site"><a href="/">Chat</a><a href="/sermons/">Sermons</a></nav>
+  </div>
+  <a href="https://apps.apple.com/..." class="get">...</a>
+</header>
+```
+
+- Mark the current page with `aria-current="page"` on its own link, and only there. The
+  home page sets it on Chat, `/sermons/` sets it on Sermons, every other page sets it on
+  neither.
+- The nav's font is declared on `.site-nav a` itself, never left to inherit. Some pages
+  style `.site-head a` directly, and that rule would otherwise render the nav in 22px serif.
+- The header is `flex-wrap:wrap` with `gap:10px 16px`. Without it the mark, the nav, and
+  the App Store link overflow a phone; wrapping drops the App Store link to its own line
+  instead of hiding it.
+- A new page gets the nav by copying a template. The four templates in the repo root all
+  carry it, so anything generated from them inherits it.
+- `/whats-new/` is the one exception. It is an in-app web view (`noindex`), so site nav
+  there would walk a user out of the app. Leave it without a header.
+
 ## Rules
 
 - Editing a post's markdown means re-rendering **both** `writings/<slug>/index.html`
   and (if title/date/body changed) `writings/index.html`. Never let them drift.
 - The templates in the repo root are the single source of truth for chrome and
   styling. Do not fork their CSS into posts — copy the template, swap the content.
+- A new public page carries the header nav (see **Header navigation**). Copying a
+  template gives it to you; a hand-built page has to add it, `/whats-new/` excepted.
 - Post links are always root-absolute: `/writings/<slug>/`.
 - After adding or removing a post, regenerate the sitemap and llms.txt: run
   `python3 generate_seo.py` from the repo root (it discovers posts by scanning `writings/`).
