@@ -219,12 +219,23 @@ all text. Quality 80 holds up on serif body copy. `jpegtran -copy none -optimize
 is a free lossless pass that also strips metadata, so run it and keep the result if smaller.
 
 **Crossfading two shots.** When one screenshot fades into another to animate something (the
-notification landing on `/sermons/`), the two files must be identical everywhere except the
-part that changes, or the whole frame shimmers. Two captures of the same screen are not
-identical: a PNG and a JPEG of the same moment differ by several levels on every pixel.
-Crop the changing region out of one capture and lay that strip over the other with CSS
-rather than crossfading two full frames. It removes the shimmer completely and the strip is
-a fraction of the bytes (23KB instead of a second 161KB frame).
+notification landing on `/sermons/`), the two captures have to come from the same session,
+seconds apart, with only the thing being animated different between them. Even then they
+are not pixel identical: a PNG and a JPEG of the same moment differ by a few levels
+everywhere, which is small enough to ignore. If a pair ever does drift visibly, crop the
+changing region out of one capture and lay that strip over the other with CSS instead of
+fading two full frames.
+
+**One clock across a set.** Every screenshot in the same hero or carousel has to agree on
+its status bar, because they fade into each other: same time, same battery, same signal,
+same presence or absence of the dynamic island. Shots taken on different devices or hours
+apart will visibly jump. When a reshoot is not possible, rebuild the odd one's status bar
+from a good one: wipe the bar down to the app's own background colour, then composite the
+good shot's glyphs back on by deriving a per-pixel alpha from how far each source pixel
+falls below its own background (`alpha = (bg - pixel) / bg`, then `out = bg_target *
+(1 - alpha)`). That keeps the real system font and antialiasing and leaves no patch seam.
+Watch the soft edges: the island's antialiasing trails four rows past where it looks like
+it ends, and a leftover delta of 4 is invisible alone but reads as a streak on flat paper.
 
 ## Rules
 

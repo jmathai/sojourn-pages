@@ -99,11 +99,9 @@
   .sm-screen.is-on{opacity:1;}
   .sm-screen img{position:absolute;top:0;left:0;width:100%;height:auto;}
   .sm-screen.from-bottom img{top:auto;bottom:0;}
-  /* The Sermons screen fades in just the notification banner, cropped from the same
-     capture, so nothing else in the shot shifts while it lands. The banner sits 40px
-     down a 248px strip, and translateY resolves against the strip's own height, so the
-     offset tracks the image at any width. */
-  .sm-notify{opacity:0;transform:translateY(calc(100% * 40 / 248));}
+  /* The Sermons screen holds the same capture twice and fades the second one in, so
+     the notification looks like it lands while you are watching. */
+  .sm-notify{opacity:0;}
   .sm-notify.run{animation:sm-notify-in .55s ease 1.1s forwards;}
   @keyframes sm-notify-in{from{opacity:0;}to{opacity:1;}}
 
@@ -182,7 +180,7 @@
           </picture>
           <picture>
             <source srcset="/assets/shot-sermons-notify.webp" type="image/webp">
-            <img class="sm-notify run" src="/assets/shot-sermons-notify.jpg" width="816" height="248" alt="" aria-hidden="true" decoding="async">
+            <img class="sm-notify run" src="/assets/shot-sermons-notify.jpg" width="816" height="1766" alt="" aria-hidden="true" decoding="async">
           </picture>
         </div>
         <picture class="sm-screen" id="screen-detail" role="tabpanel" aria-labelledby="tab-detail" aria-hidden="true">
